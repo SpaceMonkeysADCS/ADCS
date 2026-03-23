@@ -1,0 +1,4 @@
+Added Component: Designator=J13(POWER)
+Added Pin To Net: NetName=+10V Pin=J13-1
+Added Pin To Net: NetName=GND Pin=J13-2
+Added Member To Class: ClassName=Schematic Member=Component J13 POWER_CONN

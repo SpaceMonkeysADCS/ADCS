@@ -1,0 +1,13 @@
+Removed Pin From Net: NetName=M1_DigIN1 Pin=J2-1
+Removed Pin From Net: NetName=M1_DigIN2 Pin=J2-2
+Removed Pin From Net: NetName=M1_DigIO3 Pin=J2-3
+Removed Pin From Net: NetName=M1_DigIO4 Pin=J2-4
+Removed Pin From Net: NetName=GND Pin=J2-5
+Removed Pin From Net: NetName=GND Pin=J2-6
+Added Pin To Net: NetName=GND Pin=J2-1
+Added Pin To Net: NetName=GND Pin=J2-2
+Added Pin To Net: NetName=M1_DigIN1 Pin=J2-3
+Added Pin To Net: NetName=M1_DigIN2 Pin=J2-4
+Added Pin To Net: NetName=M1_DigIO3 Pin=J2-5
+Added Pin To Net: NetName=M1_DigIO4 Pin=J2-6
+Added Member To Class: ClassName=ESP_Batt_Board Member=Component R3 100k

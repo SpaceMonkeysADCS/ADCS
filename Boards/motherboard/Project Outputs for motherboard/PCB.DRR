@@ -1,0 +1,22 @@
+----------------------------------------------------------------------------------------------------------------------------------
+NCDrill File Report For: PCB.PcbDoc   1/26/2026  11:51:32 AM
+----------------------------------------------------------------------------------------------------------------------------------
+
+Layer Pair : Top Layer to Bottom Layer
+ASCII RoundHoles File : PCB.TXT
+
+Tool       Hole Size               Hole Tolerance               Hole Type       Hole Count   Plated         Tool Travel
+----------------------------------------------------------------------------------------------------------------------------------
+T1      12mil (0.3mm)                                             Round             160       PTH        21.91inch (556.44mm)
+T2      12mil (0.305mm)                                           Round             16        PTH        0.82inch (20.78mm)
+T3      32mil (0.8mm)                                             Round             2         PTH        0.20inch (5.00mm)
+T4      35mil (0.899mm)                                           Round             6         PTH        0.49inch (12.50mm)
+T5      39mil (1.001mm)                                           Round             24        PTH        3.10inch (78.74mm)
+T6      40mil (1.021mm)                                           Round             6         PTH        0.59inch (15.00mm)
+T7      55mil (1.4mm)                                             Round             4         PTH        0.55inch (13.90mm)
+T8      59mil (1.501mm)                                           Round             2         PTH        0.21inch (5.30mm)
+T9      40mil (1.021mm)                                           Round             2         NPTH       0.47inch (12.00mm)
+----------------------------------------------------------------------------------------------------------------------------------
+Totals                                                                              222
+
+Total Processing Time (hh:mm:ss) : 00:00:00

@@ -1,0 +1,20 @@
+Add Component: Footprint Not Found CAP_0805
+Add Component: Footprint Not Found CAP_0805
+Added Component: Designator=J5(EXTRA_POWR_CONN)
+Added Component: Designator=J7(EXTRA_POWR_CONN)
+Added Component: Designator=J8(EXTRA_POWR_CONN)
+Add Pin To Net: Unknown Pin: Pin C1-1
+Add Pin To Net: Unknown Pin: Pin C1-2
+Add Pin To Net: Unknown Pin: Pin C2-1
+Add Pin To Net: Unknown Pin: Pin C2-2
+Added Pin To Net: NetName=+5V Pin=J5-1
+Added Pin To Net: NetName=GND Pin=J5-2
+Added Pin To Net: NetName=+10V Pin=J7-1
+Added Pin To Net: NetName=GND Pin=J7-2
+Added Pin To Net: NetName=+3V3 Pin=J8-1
+Added Pin To Net: NetName=GND Pin=J8-2
+Add Class Member: Failed to add class member : Component C1 C2012X5R1E106K125AB
+Add Class Member: Failed to add class member : Component C2 GRM21BR61E226ME44
+Added Member To Class: ClassName=ESP_Batt_Board Member=Component J5 EXT_POWER_CONN
+Added Member To Class: ClassName=ESP_Batt_Board Member=Component J7 EXT_POWER_CONN
+Added Member To Class: ClassName=ESP_Batt_Board Member=Component J8 EXT_POWER_CONN

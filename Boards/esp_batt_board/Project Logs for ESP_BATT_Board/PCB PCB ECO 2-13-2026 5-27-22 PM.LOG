@@ -1,0 +1,97 @@
+Change Component Comment : Designator=R3 Old Comment=180k New Comment=RES_0603
+Change Component Comment : Designator=R1 Old Comment=942k New Comment=RES_0603
+Change Component Designator: OldDesignator=J4 NewDesignator=J5
+Change Component Designator: OldDesignator=J5 NewDesignator=J4
+Change Component Designator: OldDesignator=J6 NewDesignator=J7
+Change Component Designator: OldDesignator=J7 NewDesignator=J6
+Change Component Designator: OldDesignator=J10 NewDesignator=J8
+Change Component Designator: OldDesignator=J11 NewDesignator=J10
+Change Component Designator: OldDesignator=J12 NewDesignator=J11
+Change Component Designator: OldDesignator=J13 NewDesignator=J12
+Change component parameters: Designator = "R1" ("R1"); Footprint = "RES_0603"; UniqueID = "\KVAHZKMX" ("\KVAHZKMX")
+Change component parameters (AddParameter): Name = "R"; Value = "942k"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supplier 1"; Value = "DigiKey"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supplier Part Number 1"; Value = "2019-RN73H1JTTD9423D25CT-ND"; VariantName = "[No Variations]"
+Change component parameters: Designator = "R3" ("R3"); Footprint = "RES_0603"; UniqueID = "\HNVBHKVS" ("\HNVBHKVS")
+Change component parameters (AddParameter): Name = "R"; Value = "180k"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supplier 1"; Value = "Avnet"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Supplier Part Number 1"; Value = "RC0603FR-07180KL"; VariantName = "[No Variations]"
+Added Component: Designator=C1(CAP_0805)
+Add component (AddParameter): Name = "Alternate Manufacturer"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Alternate PartNumber"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Cap_Case"; Value = "0805"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Cap_F"; Value = "0.00001"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink1Description"; Value = "Datasheet link"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink1URL"; Value = "http://www.tdk.com/pdf/TDKMLCCCapRange.pdf"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "CompType"; Value = "Capacitor"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ESR_Ohm"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "IRMS_A"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "LatestRevisionDate"; Value = "2014-06-25"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer"; Value = "TDK"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MountType"; Value = "SMT"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "PackageReference"; Value = "0805"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "PartNumber"; Value = "C2012X5R1E106K125AB"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Polarized"; Value = "N"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Published"; Value = "2008-06-19"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Texas Instruments"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "RoHS"; Value = "Y"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier 1"; Value = "Digi-Key"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier 2"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier 3"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier Part Number 1"; Value = "445-5984-1-ND"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier Part Number 2"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier Part Number 3"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "SymbolVersion"; Value = "2008-07-09"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "TaMax_C"; Value = "85"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "TaMin_C"; Value = "-55"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Technology"; Value = "Ceramic"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "TempCo"; Value = "X5R"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Tolerance_%"; Value = "10"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "U/M"; Value = "EA"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "10uF"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value1"; Value = "Unknown"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value2"; Value = "25V"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ValueDisplayed"; Value = "10µF"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "VDC_V"; Value = "25"; VariantName = "[No Variations]"
+Added Component: Designator=C2(CAP_0805)
+Add component (AddParameter): Name = "Cap_Case"; Value = "0805"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "CompType"; Value = "Capacitor"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer"; Value = "MuRata"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MountType"; Value = "SMT"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "PackageReference"; Value = "0805"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "PartNumber"; Value = "GRM21BR61E226ME44"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier 1"; Value = "DigiKey"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier Part Number 1"; Value = "490-14661-1-ND"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "TaMax_C"; Value = "85"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "TempCo"; Value = "X5R"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Tolerance_%"; Value = "20"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "22uF"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ValueDisplayed"; Value = "22µF"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=+10V Pin=C1-1
+Added Pin To Net: NetName=GND Pin=C1-2
+Added Pin To Net: NetName=+5V Pin=C2-1
+Added Pin To Net: NetName=GND Pin=C2-2
+Added Member To Class: ClassName=ESP_Batt_Board Member=Component C1 C2012X5R1E106K125AB
+Added Member To Class: ClassName=ESP_Batt_Board Member=Component C2 GRM21BR61E226ME44
+Added Member To Class: ClassName=ESP_Batt_Board Member=Component J1 S6B-XH-SM4-TB(LF)(SN)
+Added Member To Class: ClassName=ESP_Batt_Board Member=Component J2 S6B-XH-SM4-TB(LF)(SN)
+Added Member To Class: ClassName=ESP_Batt_Board Member=Component J3 S2B-XH-A
+Added Member To Class: ClassName=ESP_Batt_Board Member=Component J4 EXT_POWER_CONN
+Added Member To Class: ClassName=ESP_Batt_Board Member=Component J5 S6B-XH-SM4-TB(LF)(SN)
+Added Member To Class: ClassName=ESP_Batt_Board Member=Component J6 EXT_POWER_CONN
+Added Member To Class: ClassName=ESP_Batt_Board Member=Component J7 SM04B-SRSS-TB
+Added Member To Class: ClassName=ESP_Batt_Board Member=Component J8 S6B-XH-SM4-TB(LF)(SN)
+Added Member To Class: ClassName=ESP_Batt_Board Member=Component J9 SM04B-SRSS-TB
+Added Member To Class: ClassName=ESP_Batt_Board Member=Component J10 S2B-XH-A
+Added Member To Class: ClassName=ESP_Batt_Board Member=Component J11 S2B-XH-A
+Added Member To Class: ClassName=ESP_Batt_Board Member=Component J12 S2B-XH-A
+Added Member To Class: ClassName=ESP_Batt_Board Member=Component L1 IHLP1212BZEZ2R2M1Z
+Added Member To Class: ClassName=ESP_Batt_Board Member=Component MH1 MH
+Added Member To Class: ClassName=ESP_Batt_Board Member=Component MH2 MH
+Added Member To Class: ClassName=ESP_Batt_Board Member=Component MH3 MH
+Added Member To Class: ClassName=ESP_Batt_Board Member=Component MH4 MH
+Added Member To Class: ClassName=ESP_Batt_Board Member=Component R1 RES_0603
+Added Member To Class: ClassName=ESP_Batt_Board Member=Component R2 100k
+Added Member To Class: ClassName=ESP_Batt_Board Member=Component R3 RES_0603
+Added Member To Class: ClassName=ESP_Batt_Board Member=Component U1 TPS62160DGKR
+Added Member To Class: ClassName=ESP_Batt_Board Member=Component U2 ESP32-S3-DEVKITC-1-N8R2

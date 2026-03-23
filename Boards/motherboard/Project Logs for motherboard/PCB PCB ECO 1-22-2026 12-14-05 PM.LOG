@@ -1,0 +1,22 @@
+Added Component: Designator=U1(ESCON24.2)
+Added Pin To Net: NetName=M1+ Pin=U1-1
+Added Pin To Net: NetName=M1- Pin=U1-2
+Added Pin To Net: NetName=M1_3 Pin=U1-3
+Added Pin To Net: NetName=+VCC_M1 Pin=U1-4
+Added Pin To Net: NetName=GND Pin=U1-5
+Added Pin To Net: NetName=M1_5V_HALL Pin=U1-6
+Added Pin To Net: NetName=M1_HALL1 Pin=U1-7
+Added Pin To Net: NetName=M1_HALL2 Pin=U1-8
+Added Pin To Net: NetName=M1_HALL3 Pin=U1-9
+Added Pin To Net: NetName=M1_DigIO4 Pin=U1-14
+Added Pin To Net: NetName=M1_DigIO3 Pin=U1-15
+Added Pin To Net: NetName=M1_DigIN2 Pin=U1-16
+Added Pin To Net: NetName=M1_DigIN1 Pin=U1-17
+Added Pin To Net: NetName=GND Pin=U1-18
+Added Pin To Net: NetName=M1_ANOUT2 Pin=U1-19
+Added Pin To Net: NetName=M1_ANOUT1 Pin=U1-20
+Added Pin To Net: NetName=M1_AnIN2- Pin=U1-21
+Added Pin To Net: NetName=M1_AnIN2+ Pin=U1-22
+Added Pin To Net: NetName=M1_AnIN1- Pin=U1-23
+Added Pin To Net: NetName=M1_AnIN1+ Pin=U1-24
+Added Member To Class: ClassName=Schematic Member=Component U1 ESCON24.2
