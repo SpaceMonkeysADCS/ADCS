@@ -76,6 +76,31 @@ bool mot_x_ok = maxon_motor_init(
                 false // invert direction
 );
 
+bool mot_y_ok = maxon_motor_init(
+                &y_mot,
+                8, // pwm
+                9, // enable
+                10, // direction
+                0, // channel
+                4000, // pwm freq
+                10, // num bits
+                false, // invert enable
+                false // invert direction
+);
+
+bool mot_z_ok = maxon_motor_init(
+                &z_mot,
+                18, // pwm
+                21, // enable
+                47, // direction
+                0, // channel
+                4000, // pwm freq
+                10, // num bits
+                false, // invert enable
+                false // invert direction
+);
+
+
 maxon_motor_enable(&x_mot, true);
 maxon_motor_set(&x_mot, true, 0.3f); // 30% speed test CCW
 

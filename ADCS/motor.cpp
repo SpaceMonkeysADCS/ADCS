@@ -63,7 +63,11 @@ void maxon_motor_set_speed(maxon_motor_t* m, float speed01) {
   if (!m) return;
 
   speed01 = clamp01(speed01);
-  uint32_t duty = (uint32_t)(speed01 * (float)max_duty(m->pwm_bits));
+  //   0.0 -> 10% PWM  (ESC interprets as 0% speed)
+  //   1.0 -> 100% PWM (ESC interprets as 90% speed)
+  float pwm_frac = 0.10f + 0.90f * speed01;
+
+  uint32_t duty = (uint32_t)(pwm_frac * (float)max_duty(m->pwm_bits));
   ledcWrite(m->pin_pwm, duty);
 }
 
