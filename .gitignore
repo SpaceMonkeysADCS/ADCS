@@ -1,0 +1,9 @@
+History/
+Project Logs for motherboard/
+Project Outputs for motherboard/
+Project Outputs for ESP_BATT_Board/
+Project Logs for ESP_BATT_Board/
+*.OutJob
+*.BomDoc
+*.PrjPcbStructure
+esp_batt_board_manf.zip
