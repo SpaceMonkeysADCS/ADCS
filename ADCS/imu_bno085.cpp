@@ -56,3 +56,28 @@ int get_quaternion(quaternion* out_quat) {
 
   return 1;
 }
+
+int get_angular_velocity(velocity_vec* out_vel)
+{
+  if (!out_vel) return 0;
+
+  if (imu.wasReset()) {
+    imu.enableReport(SH2_GAME_ROTATION_VECTOR);
+    imu.enableReport(SH2_GYROSCOPE_CALIBRATED);
+  }
+
+  if (!imu.getSensorEvent(&data)) {
+    return 0;
+  }
+
+  if (data.sensorId != SH2_GYROSCOPE_CALIBRATED) {
+    return 0;
+  }
+
+  out_vel->t_ms = millis();
+  out_vel->x = data.un.gyroscope.x;
+  out_vel->y = data.un.gyroscope.y;
+  out_vel->z = data.un.gyroscope.z;
+
+  return 1;
+}

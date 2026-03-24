@@ -52,7 +52,7 @@ void loop() {
 
   quat_pkt_t p;
   noInterrupts();
-  p = lastPkt;
+  p = lastPkt;  
   newPkt = false;
   interrupts();
 

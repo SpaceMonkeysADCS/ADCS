@@ -151,6 +151,7 @@ void loop() {
 #endif
 
   quaternion q;
+  //velocity_vec v;
 
   if (get_quaternion(&q)) {
 
@@ -164,9 +165,8 @@ void loop() {
     // Send quaternion to receiver esp32
     esp_err_t err = esp_now_send(RCVR_MAC_ADDR, (uint8_t*)&pkt, sizeof(pkt));
     if (err != ESP_OK) {
-       Serial.printf("ESP-NOW send err=%d\n", (int)err);
-    }
+       Serial.printf("Error sending quaternion: ESP-NOW send err=%d\n", (int)err);
+    }    
   }
-
   delay(10);
 }
