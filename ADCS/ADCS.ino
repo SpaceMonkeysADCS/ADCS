@@ -100,10 +100,16 @@ bool mot_z_ok = maxon_motor_init(
                 false // invert direction
 );
 
-
+// TEST
 maxon_motor_enable(&x_mot, true);
 maxon_motor_set(&x_mot, true, 0.3f); // 30% speed test CCW
 
+maxon_motor_enable(&y_mot, true);
+maxon_motor_set(&y_mot, true, 0.3f); // 30% speed test CCW
+
+maxon_motor_enable(&z_mot, true);
+maxon_motor_set(&z_mot, true, 0.3f); // 30% speed test CCW
+// END TEST
 
 // OTA Updates
 #if OTA
