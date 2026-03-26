@@ -1,9 +1,16 @@
 #include <Arduino.h>
 #include "motor.h"
+#include <math.h>
 
 static inline float clamp01(float x) {
   if (x < 0.0f) return 0.0f;
   if (x > 1.0f) return 1.0f;
+  return x;
+}
+
+static inline float clampf(float x, float xmin, float xmax) {
+  if (x < xmin) return xmin;
+  if (x > xmax) return xmax;
   return x;
 }
 
@@ -16,7 +23,7 @@ bool maxon_motor_init(maxon_motor_t* m,
                       uint8_t pin_pwm, uint8_t pin_en, uint8_t pin_dir,
                       uint8_t pwm_chan,
                       uint32_t pwm_hz, uint8_t pwm_bits,
-                      bool invert_en, bool invert_dir)
+                      bool invert_en, bool invert_dir, float kt)
 {
   if (!m) return false;
 
@@ -30,6 +37,7 @@ bool maxon_motor_init(maxon_motor_t* m,
 
   m->invert_en  = invert_en;
   m->invert_dir = invert_dir;
+  m->kt = kt;
 
   pinMode(m->pin_en, OUTPUT);
   pinMode(m->pin_dir, OUTPUT);
@@ -63,8 +71,8 @@ void maxon_motor_set_speed(maxon_motor_t* m, float speed01) {
   if (!m) return;
 
   speed01 = clamp01(speed01);
-  //   0.0 -> 10% PWM  (ESC interprets as 0% speed)
-  //   1.0 -> 100% PWM (ESC interprets as 90% speed)
+  // 0.0 -> 10% PWM
+  // 1.0 -> 100% PWM
   float pwm_frac = 0.10f + 0.90f * speed01;
 
   uint32_t duty = (uint32_t)(pwm_frac * (float)max_duty(m->pwm_bits));
@@ -75,4 +83,28 @@ void maxon_motor_set(maxon_motor_t* m, bool ccw, float speed01) {
   if (!m) return;
   maxon_motor_set_dir_ccw(m, ccw);
   maxon_motor_set_speed(m, speed01);
+}
+
+// current_A is signed: + = CCW, - = CW
+// current_limit_A should match your ESCON scaling, e.g. 2.8 A
+void maxon_motor_set_current(maxon_motor_t* m, float current_A, float current_limit_A) {
+  if (!m) return;
+  if (current_limit_A <= 0.0f) return;
+
+  // set direction from sign
+  bool ccw = (current_A >= 0.0f);
+  maxon_motor_set_dir_ccw(m, ccw);
+
+  // magnitude only for PWM command
+  float current_mag_A = fabsf(current_A);
+  current_mag_A = clampf(current_mag_A, 0.0f, current_limit_A);
+
+  // ESCON mapping:
+  // 10% PWM -> 0 A
+  // 90% PWM -> current_limit_A
+  float current_frac = current_mag_A / current_limit_A;
+  float pwm_frac = 0.10f + 0.80f * current_frac;
+
+  uint32_t duty = (uint32_t)(pwm_frac * (float)max_duty(m->pwm_bits));
+  ledcWrite(m->pin_pwm, duty);
 }

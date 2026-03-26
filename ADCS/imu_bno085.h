@@ -13,7 +13,7 @@ typedef struct {
 typedef struct{
   uint32_t t_ms;
   float x, y, z; 
-} velocity_vec; 
+} velocity_vec;
 
 /**
  * Initialize BNO085 on I2C using given SDA/SCL pins.
