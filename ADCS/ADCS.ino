@@ -30,27 +30,30 @@ maxon_motor_t y_mot;
 maxon_motor_t z_mot;
 
 ////** GLOBAL PD CONTROLLER VARS **////
-float Kp[3][3] = {{20, 0, 0}, {0, 20, 0}, {0, 0, 20}};
-float Kd[3][3] = {{7, 0, 0}, {0, 7, 0}, {0, 0, 7}};
+//float Kp[3][3] = { { 20, 0, 0 }, { 0, 20, 0 }, { 0, 0, 20 } };
+//float Kd[3][3] = { { 7, 0, 0 }, { 0, 7, 0 }, { 0, 0, 7 } };
+
+float Kp[3][3] = { { 0.001, 0, 0 }, { 0, .001, 0 }, { 0, 0, .001 } };
+float Kd[3][3] = { { .01, 0, 0 }, { 0, .01, 0 }, { 0, 0, .01 } };
 
 float q_e[4] = {};
-float q_BW[4] = {1.0f, 0.0f, 0.0f, 0.0f};
-float omega[3] = {0.0f, 0.0f, 0.0f};
-float wheel_tau[3] = {0.0f, 0.0f, 0.0f};
+float q_BW[4] = { 1.0f, 0.0f, 0.0f, 0.0f };
+float omega[3] = { 0.0f, 0.0f, 0.0f };
+float wheel_tau[3] = { 0.0f, 0.0f, 0.0f };
 
-float r_COMB[3] = {0.04721447, 0.04700558, -0.05316587};
-float r_COMmag = sqrt(r_COMB[0]*r_COMB[0] + r_COMB[1]*r_COMB[1] + r_COMB[2]*r_COMB[2]);
-float r_BalW[3] = {0, 0, -r_COMmag};
-float q_des[4] = {9.010, -0.3060, 0.3074, 0};
-float mag_des = sqrt(q_des[0]*q_des[0] + q_des[1]*q_des[1] + q_des[2]*q_des[2] + q_des[3]*q_des[3]);
+float r_COMB[3] = { 0.04721447, 0.04700558, -0.05316587 };
+float r_COMmag = sqrt(r_COMB[0] * r_COMB[0] + r_COMB[1] * r_COMB[1] + r_COMB[2] * r_COMB[2]);
+float r_BalW[3] = { 0, 0, -r_COMmag };
+float q_des[4] = { 9.010, -0.3060, 0.3074, 0 };
+float mag_des = sqrt(q_des[0] * q_des[0] + q_des[1] * q_des[1] + q_des[2] * q_des[2] + q_des[3] * q_des[3]);
 
 //Initializing gravity vector in world frame
 float g = 9.81;
-float mass = 0.612; //Kg
-float FgW[3] = {0, 0, mass * g};
+float mass = 0.612;  //Kg
+float FgW[3] = { 0, 0, mass* g };
 
-float wheel_I = 5.59e-6; //kg/m^2
-float tense_COM[3][3] = {{0.00437103, 0.00135069, -0.00152319}, {0.00135069, 0.00445678, -0.00151239}, {-0.00152319, -0.00151239, 0.00376271}};
+float wheel_I = 5.59e-6;  //kg/m^2
+float tense_COM[3][3] = { { 0.00437103, 0.00135069, -0.00152319 }, { 0.00135069, 0.00445678, -0.00151239 }, { -0.00152319, -0.00151239, 0.00376271 } };
 ////** END GLOBAL PD CONTROLLER VARS **////
 
 ////** ESP-NOW SETUP **////
@@ -59,17 +62,18 @@ static const uint8_t RCVR_MAC_ADDR[6] = { 0x1C, 0xDB, 0xD4, 0x9C, 0x35, 0x30 };
 typedef struct __attribute__((packed)) {
   uint32_t t_ms;
   float r, i, j, k;
-} quat_pkt_t; // quaternion packet
+} quat_pkt_t;  // quaternion packet
 
 typedef struct __attribute__((packed)) {
   uint32_t t_ms;
   float x, y, z;
-} vel_pkt_t; // velocity vector packet
+} vel_pkt_t;  // velocity vector packet
 ////** END ESP-NOW SETUP **////
 
 ////** OTA SOFTWARE UPDATE SETUP **////
 #if OTA
 static void ota_setup() {
+  Serial.println("ota start");
   WiFi.mode(WIFI_STA);
   WiFi.begin(wifi_ssid, wifi_password);
 
@@ -106,9 +110,8 @@ void setup() {
     4000,   // pwm freq
     10,     // num bits
     false,  // invert enable
-    false,   // invert direction
-    0.141
-  );
+    false,  // invert direction
+    0.141);
 
   bool mot_y_ok = maxon_motor_init(
     &y_mot,
@@ -119,8 +122,8 @@ void setup() {
     4000,   // pwm freq
     10,     // num bits
     false,  // invert enable
-    false,   // invert direction
-    0.141    // kt
+    false,  // invert direction
+    0.141   // kt
   );
 
   bool mot_z_ok = maxon_motor_init(
@@ -132,18 +135,23 @@ void setup() {
     4000,   // pwm freq
     10,     // num bits
     false,  // invert enable
-    false,   // invert direction
-    0.141
-  );
+    false,  // invert direction
+    0.141);
 
-  maxon_motor_enable(&x_mot, true);
-  maxon_motor_enable(&y_mot, true);
-  maxon_motor_enable(&z_mot, true);
-  
+  // Initialize motors, but set enable to false; motors are enabled at end of setup
+  maxon_motor_enable(&x_mot, false);
+  maxon_motor_enable(&y_mot, false);
+  maxon_motor_enable(&z_mot, false);
+
+  // send 10% pwm to esc while esp finishes booting to avoid invalid pwm input
+  maxon_motor_set_current(&x_mot, 0.0f, 2.8f);
+  maxon_motor_set_current(&y_mot, 0.0f, 2.8f);
+  maxon_motor_set_current(&z_mot, 0.0f, 2.8f);
+
   // Normalize desired quaternion
-  for (int i = 0; i < 4; i++){
-  q_des[i] = q_des[i] / mag_des;
-}
+  for (int i = 0; i < 4; i++) {
+    q_des[i] = q_des[i] / mag_des;
+  }
 
 // OTA Updates
 #if OTA
@@ -175,6 +183,11 @@ void setup() {
     while (1) delay(10);
   }
   Serial.println("BNO085 init OK");
+
+  // Enable motors
+  maxon_motor_enable(&x_mot, true);
+  maxon_motor_enable(&y_mot, true);
+  maxon_motor_enable(&z_mot, true);
 }
 
 void loop() {
@@ -223,15 +236,32 @@ void loop() {
     float iz_cmd = wheel_tau[2] / z_mot.kt;
 
     //controller saturation
-    if (ix_cmd >  2.8f) ix_cmd =  2.8f;
+    if (ix_cmd > 2.8f) ix_cmd = 2.8f;
     if (ix_cmd < -2.8f) ix_cmd = -2.8f;
-    if (iy_cmd >  2.8f) iy_cmd =  2.8f;
+    if (iy_cmd > 2.8f) iy_cmd = 2.8f;
     if (iy_cmd < -2.8f) iy_cmd = -2.8f;
-    if (iz_cmd >  2.8f) iz_cmd =  2.8f;
+    if (iz_cmd > 2.8f) iz_cmd = 2.8f;
     if (iz_cmd < -2.8f) iz_cmd = -2.8f;
 
     maxon_motor_set_current(&x_mot, ix_cmd, 2.8f);
     maxon_motor_set_current(&y_mot, iy_cmd, 2.8f);
     maxon_motor_set_current(&z_mot, iz_cmd, 2.8f);
+
+    Serial.print("ix: ");
+    Serial.print(ix_cmd, 4);
+    Serial.print("    iy: ");
+    Serial.print(iy_cmd, 4);
+    Serial.print("    iz: ");
+    Serial.print(iz_cmd, 4);
+
+    Serial.print("  error mag: ");
+    Serial.print(q_e[0], 4);
+    Serial.print("  error x: ");
+    Serial.print(q_e[1], 4);
+    Serial.print("  error y: ");
+    Serial.print(q_e[2], 4);
+    Serial.print("  error z: ");
+    Serial.println(q_e[3], 4);
+
   }
 }
