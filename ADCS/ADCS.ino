@@ -30,13 +30,15 @@ maxon_motor_t y_mot;
 maxon_motor_t z_mot;
 
 ////** GLOBAL PD CONTROLLER VARS **////
-//float Kp[3][3] = { { 20, 0, 0 }, { 0, 20, 0 }, { 0, 0, 20 } };
-//float Kd[3][3] = { { 7, 0, 0 }, { 0, 7, 0 }, { 0, 0, 7 } };
+float Kp[3][3] = { { .2, 0, 0 }, { 0, .2, 0 }, { 0, 0, .2 } };
+float Kd[3][3] = { { .7, 0, 0 }, { 0, .7, 0 }, { 0, 0, .7 } };
 
-float Kp[3][3] = { { 0.001, 0, 0 }, { 0, .001, 0 }, { 0, 0, .001 } };
-float Kd[3][3] = { { .01, 0, 0 }, { 0, .01, 0 }, { 0, 0, .01 } };
+// float Kp[3][3] = { { 0.001, 0, 0 }, { 0, .001, 0 }, { 0, 0, .001 } };
+// float Kd[3][3] = { { .01, 0, 0 }, { 0, .01, 0 }, { 0, 0, .01 } };
 
 float q_e[4] = {};
+float q_0[4] = {};
+bool q0_set = false;
 float q_BW[4] = { 1.0f, 0.0f, 0.0f, 0.0f };
 float omega[3] = { 0.0f, 0.0f, 0.0f };
 float wheel_tau[3] = { 0.0f, 0.0f, 0.0f };
@@ -44,7 +46,7 @@ float wheel_tau[3] = { 0.0f, 0.0f, 0.0f };
 float r_COMB[3] = { 0.04721447, 0.04700558, -0.05316587 };
 float r_COMmag = sqrt(r_COMB[0] * r_COMB[0] + r_COMB[1] * r_COMB[1] + r_COMB[2] * r_COMB[2]);
 float r_BalW[3] = { 0, 0, -r_COMmag };
-float q_des[4] = { 9.010, -0.3060, 0.3074, 0 };
+float q_des[4] = { 0.9010, -0.3060, 0.3074, 0 };
 float mag_des = sqrt(q_des[0] * q_des[0] + q_des[1] * q_des[1] + q_des[2] * q_des[2] + q_des[3] * q_des[3]);
 
 //Initializing gravity vector in world frame
@@ -62,12 +64,13 @@ static const uint8_t RCVR_MAC_ADDR[6] = { 0x1C, 0xDB, 0xD4, 0x9C, 0x35, 0x30 };
 typedef struct __attribute__((packed)) {
   uint32_t t_ms;
   float r, i, j, k;
-} quat_pkt_t;  // quaternion packet
+  float ix, iy, iz;
+} pkt;
 
-typedef struct __attribute__((packed)) {
-  uint32_t t_ms;
-  float x, y, z;
-} vel_pkt_t;  // velocity vector packet
+static pkt tx_pkt;
+static uint32_t last_send_ms = 0;
+static const uint32_t SEND_PERIOD_MS = 50;
+
 ////** END ESP-NOW SETUP **////
 
 ////** OTA SOFTWARE UPDATE SETUP **////
@@ -101,8 +104,8 @@ void setup() {
   Serial.begin(115200);
   delay(2000);
 
-  bool mot_x_ok = maxon_motor_init(
-    &x_mot,
+  bool mot_z_ok = maxon_motor_init(
+    &z_mot,
     4,      // pwm
     5,      // enable
     6,      // direction
@@ -110,11 +113,11 @@ void setup() {
     4000,   // pwm freq
     10,     // num bits
     false,  // invert enable
-    false,  // invert direction
+    true,  // invert direction
     0.141);
 
-  bool mot_y_ok = maxon_motor_init(
-    &y_mot,
+  bool mot_x_ok = maxon_motor_init(
+    &x_mot,
     8,      // pwm
     9,      // enable
     10,     // direction
@@ -122,12 +125,12 @@ void setup() {
     4000,   // pwm freq
     10,     // num bits
     false,  // invert enable
-    false,  // invert direction
+    true,  // invert direction
     0.141   // kt
   );
 
-  bool mot_z_ok = maxon_motor_init(
-    &z_mot,
+  bool mot_y_ok = maxon_motor_init(
+    &y_mot,
     18,     // pwm
     21,     // enable
     47,     // direction
@@ -135,7 +138,7 @@ void setup() {
     4000,   // pwm freq
     10,     // num bits
     false,  // invert enable
-    false,  // invert direction
+    true,  // invert direction
     0.141);
 
   // Initialize motors, but set enable to false; motors are enabled at end of setup
@@ -166,6 +169,7 @@ void setup() {
     while (1) delay(10);
   }
 
+  // Add peer esp32 (i.e. the receiver connected to debugging laptop)
   esp_now_peer_info_t peer{};
   memcpy(peer.peer_addr, RCVR_MAC_ADDR, 6);
   peer.channel = 0;  // 0 = use current WiFi channel
@@ -177,7 +181,7 @@ void setup() {
   }
   Serial.println("ESP-NOW ready");
 
-  // Initialize IMU
+  // Initialize IMU. ** If it fails, it blocks and the system will not work **
   if (!imu_init(SDA1_PIN, SCL1_PIN, IMU_ADDR, I2C_HZ)) {
     Serial.println("BNO085/IMU init FAILED");
     while (1) delay(10);
@@ -204,19 +208,36 @@ void loop() {
 
   bool q_ok = get_quaternion(&q);
   bool v_ok = get_angular_velocity(&v);
+  float q_curr[4] = {};
+  float q_rot[4] = {};
+  float q_inv[4] = {};
 
   // Update persistent state
   if (q_ok) {
-    q_BW[0] = q.r;
-    q_BW[1] = q.j;
-    q_BW[2] = -1.0f * q.i;
-    q_BW[3] = q.k;
+    q_curr[0] = q.r;
+    q_curr[1] = q.i;
+    q_curr[2] = q.j;
+    q_curr[3] = q.k;
+
+    if (!q0_set) {
+      q_0[0] = q_curr[0];
+      q_0[1] = q_curr[1];
+      q_0[2] = q_curr[2];
+      q_0[3] = q_curr[3];
+      q0_set = true;
+    }
+    quatINV(q_0, q_inv);
+    quatMult(q_inv, q_curr, q_rot);
+    q_BW[0] = q_rot[0];
+    q_BW[1] = q_rot[1];
+    q_BW[2] = -1.0f * q_rot[2];
+    q_BW[3] = q_rot[3];
     have_q = true;
   }
 
   if (v_ok) {
-    omega[0] = v.y;
-    omega[1] = -1.0f * v.x;
+    omega[0] = v.x;
+    omega[1] = -1.0f * v.y;
     omega[2] = v.z;
     have_w = true;
   }
@@ -231,6 +252,7 @@ void loop() {
     errorQuaternion(q_BW, q_des, q_e);
     Attitude_PD(q_BW, q_e, omega, Kp, Kd, tense_COM, wheel_tau, FgW, r_COMB);
 
+    // calculate current to send to each motor given torque using K_t
     float ix_cmd = wheel_tau[0] / x_mot.kt;
     float iy_cmd = wheel_tau[1] / y_mot.kt;
     float iz_cmd = wheel_tau[2] / z_mot.kt;
@@ -243,10 +265,38 @@ void loop() {
     if (iz_cmd > 2.8f) iz_cmd = 2.8f;
     if (iz_cmd < -2.8f) iz_cmd = -2.8f;
 
+    // command motor current to x, y, z motors
+    // float theta = 2 * acos(q_e[0]);
+    // if (theta >= 0.785){
+    //   ix_cmd = 0.0f;
+    //   iy_cmd = 0.0f;
+    //   iz_cmd = 0.0f;
+    // }
     maxon_motor_set_current(&x_mot, ix_cmd, 2.8f);
     maxon_motor_set_current(&y_mot, iy_cmd, 2.8f);
     maxon_motor_set_current(&z_mot, iz_cmd, 2.8f);
 
+    // Transmit data packet at 20Hz
+    uint32_t now_ms = millis();
+    if (now_ms - last_send_ms >= SEND_PERIOD_MS) {
+      last_send_ms = now_ms;
+
+      tx_pkt.t_ms = now_ms;
+      tx_pkt.r = q_BW[0];
+      tx_pkt.i = q_BW[1];
+      tx_pkt.j = q_BW[2];
+      tx_pkt.k = q_BW[3];
+      tx_pkt.ix = ix_cmd;
+      tx_pkt.iy = iy_cmd;
+      tx_pkt.iz = iz_cmd;
+
+      esp_err_t result = esp_now_send(RCVR_MAC_ADDR, (uint8_t*)&tx_pkt, sizeof(tx_pkt));
+      if (result != ESP_OK) {
+        Serial.println("ESP-NOW send failed");
+      }
+    }
+
+    // Print rotation and current commands to motors
     Serial.print("ix: ");
     Serial.print(ix_cmd, 4);
     Serial.print("    iy: ");
@@ -254,13 +304,19 @@ void loop() {
     Serial.print("    iz: ");
     Serial.print(iz_cmd, 4);
 
-    Serial.print("  error mag: ");
+    Serial.print("  q mag: ");
+    Serial.print(q_rot[0], 4);
+    Serial.print("  q x: ");
+    Serial.print(q_rot[1], 4);
+    Serial.print("  q y: ");
+    Serial.print(q_rot[2], 4);
+    Serial.print("  q z: ");
+    Serial.print(q_rot[3], 4);
+
+    Serial.print("  err: ");
     Serial.print(q_e[0], 4);
-    Serial.print("  error x: ");
     Serial.print(q_e[1], 4);
-    Serial.print("  error y: ");
     Serial.print(q_e[2], 4);
-    Serial.print("  error z: ");
     Serial.println(q_e[3], 4);
 
   }
