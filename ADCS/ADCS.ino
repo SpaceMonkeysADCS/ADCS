@@ -112,7 +112,7 @@ void setup() {
     10,     // num bits
     false,  // invert enable
     true,   // invert direction
-    0.00823);
+    0.00823f);
 
   bool mot_x_ok = maxon_motor_init(
     &x_mot,
@@ -124,7 +124,7 @@ void setup() {
     10,     // num bits
     false,  // invert enable
     true,   // invert direction
-    0.00823   // kt
+    0.00823f   // kt
   );
 
   bool mot_y_ok = maxon_motor_init(
@@ -137,12 +137,12 @@ void setup() {
     10,     // num bits
     false,  // invert enable
     false,  // invert direction
-    0.00823);
+    0.00823f);
 
   // Initialize motors, but set enable to false; motors are enabled at end of setup
-  maxon_motor_enable(&x_mot, false);
-  maxon_motor_enable(&y_mot, false);
-  maxon_motor_enable(&z_mot, false);
+  maxon_motor_enable(&x_mot, true);
+  maxon_motor_enable(&y_mot, true);
+  maxon_motor_enable(&z_mot, true);
 
   // send 10% pwm to esc while esp finishes booting to avoid invalid pwm input
   maxon_motor_set_current(&x_mot, 0.0f, 2.8f);
@@ -279,9 +279,9 @@ void loop() {
       iy_cmd = 0.0f;
       iz_cmd = 0.0f;
     }
-    maxon_motor_set_current(&x_mot, ix_cmd, 2.8f);
-    maxon_motor_set_current(&y_mot, iy_cmd, 2.8f);
-    maxon_motor_set_current(&z_mot, iz_cmd, 2.8f);
+    maxon_motor_set_current(&x_mot, 0.0f, 2.8f);
+    maxon_motor_set_current(&y_mot, 2.5f, 2.8f);
+    maxon_motor_set_current(&z_mot, 0.0f, 2.8f);
 
     // Transmit data packet at 20Hz
     uint32_t now_ms = millis();

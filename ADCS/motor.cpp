@@ -103,7 +103,7 @@ void maxon_motor_set_current(maxon_motor_t* m, float current_A, float current_li
   // 10% PWM -> 0 A
   // 90% PWM -> current_limit_A
   float current_frac = current_mag_A / current_limit_A;
-  float pwm_frac = 0.11f + 0.79f * current_frac;
+  float pwm_frac = 0.103f + 0.797f * current_frac;
 
   uint32_t duty = (uint32_t)(pwm_frac * (float)max_duty(m->pwm_bits));
   ledcWrite(m->pin_pwm, duty);
