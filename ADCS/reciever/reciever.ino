@@ -5,11 +5,11 @@
 const char* wifi_ssid = "SteinPhone";
 const char* wifi_password = "stein2003";
 
-// Must exactly match sender packet
 typedef struct __attribute__((packed)) {
   uint32_t t_ms;
   float r, i, j, k;
   float ix, iy, iz;
+  float gx, gy, gz;
 } pkt_t;
 
 volatile bool newPkt = false;
@@ -47,8 +47,7 @@ void setup() {
   esp_now_register_recv_cb(onRecv);
 
   Serial.println("ESP-NOW receiver ready.");
-  Serial.println("t_ms,r,i,j,k,ix,iy,iz");
-}
+  Serial.println("t_ms,r,i,j,k,ix,iy,iz,gx,gy,gz");}
 
 void loop() {
   static uint32_t lastPrint = 0;
@@ -82,5 +81,14 @@ void loop() {
   Serial.print(p.iy, 6);
   Serial.print(", ");
   Serial.print(p.iz, 6);
-  Serial.println("]");
+  Serial.print("]");
+  Serial.print("  grav_vec = [");
+  Serial.print(p.gx, 4);
+  Serial.print(", ");
+  Serial.print(p.gy, 4);
+  Serial.print(", ");
+  Serial.print(p.gz, 4);
+  Serial.print("]");
+  Serial.println();
+
 }

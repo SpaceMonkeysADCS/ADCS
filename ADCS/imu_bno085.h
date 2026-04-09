@@ -15,6 +15,11 @@ typedef struct{
   float x, y, z; 
 } velocity_vec;
 
+typedef struct {
+  uint32_t t_ms;
+  float x, y, z;
+} gravity_vec;
+
 /**
  * Initialize BNO085 on I2C using given SDA/SCL pins.
  * addr is usually 0x4A or 0x4B.
@@ -33,6 +38,9 @@ int get_quaternion(quaternion* out_quat);
  * Returns 1 if out_vel was written with a NEW sample, else 0.
  */
 int get_angular_velocity(velocity_vec* out_vel);
+
+int get_gravity(gravity_vec* out_g);
+
 
 
 #ifdef __cplusplus

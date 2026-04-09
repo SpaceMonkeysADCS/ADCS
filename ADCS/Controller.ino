@@ -63,7 +63,7 @@ void Attitude_PD(float q_BW[4], float q_e[4], float omega[3], float Kp[3][3], fl
 
   //running 3 axis control law
   for (int i = 0; i < 3; i++){
-    wheel_tau[i] = -1.0*e_p[i] - e_d[i] + w_I[i] - tauGB[i];
+    wheel_tau[i] = -1.0f*e_p[i] + e_d[i] + 0.0*inertia_comp[i] + tauGB[i];
   }
   
 }
