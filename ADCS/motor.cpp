@@ -23,19 +23,18 @@ bool maxon_motor_init(maxon_motor_t* m,
                       uint8_t pin_pwm, uint8_t pin_en, uint8_t pin_dir,
                       uint8_t pwm_chan,
                       uint32_t pwm_hz, uint8_t pwm_bits,
-                      bool invert_en, bool invert_dir, float kt)
-{
+                      bool invert_en, bool invert_dir, float kt) {
   if (!m) return false;
 
   m->pin_pwm = pin_pwm;
-  m->pin_en  = pin_en;
+  m->pin_en = pin_en;
   m->pin_dir = pin_dir;
 
-  m->pwm_chan = pwm_chan;   // kept for compatibility, not used by LEDC 3.x
-  m->pwm_hz   = pwm_hz;
+  m->pwm_chan = pwm_chan;  // kept for compatibility, not used by LEDC 3.x
+  m->pwm_hz = pwm_hz;
   m->pwm_bits = pwm_bits;
 
-  m->invert_en  = invert_en;
+  m->invert_en = invert_en;
   m->invert_dir = invert_dir;
   m->kt = kt;
 
@@ -47,7 +46,7 @@ bool maxon_motor_init(maxon_motor_t* m,
   }
 
   maxon_motor_enable(m, false);
-  maxon_motor_set_dir_ccw(m, false); // default CW
+  maxon_motor_set_dir_ccw(m, false);  // default CW
   ledcWrite(m->pin_pwm, 0);
 
   return true;
@@ -85,8 +84,6 @@ void maxon_motor_set(maxon_motor_t* m, bool ccw, float speed01) {
   maxon_motor_set_speed(m, speed01);
 }
 
-// current_A is signed: + = CCW, - = CW
-// current_limit_A should match your ESCON scaling, e.g. 2.8 A
 void maxon_motor_set_current(maxon_motor_t* m, float current_A, float current_limit_A) {
   if (!m) return;
   if (current_limit_A <= 0.0f) return;

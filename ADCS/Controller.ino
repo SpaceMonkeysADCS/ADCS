@@ -1,4 +1,4 @@
-void Attitude_PD(float q_BW[4], float q_e[4], float omega[3], float Kp[3][3], float Kd[3][3], float I[3][3], float wheel_tau[3], float FgW[3], float r_COMB[3]){
+void Attitude_PD(float q_BW[4], float q_e[4], float omega[3], float Kp[3][3], float Kd[3][3], float I[3][3], float wheel_tau[3], float FgW[3], float r_COMB[3], float FgB[3]){
   //Max Howerter 3/26/2026
   //
   //This is the main attitude controller for the sat, following the controll law specified in the controller documentation
@@ -53,17 +53,19 @@ void Attitude_PD(float q_BW[4], float q_e[4], float omega[3], float Kp[3][3], fl
 
 
   //Finding grav vector in body frame
-  float FgB[3];
-  quatRotate(q_BW, FgW, FgB);
+  // float FgB[3];
+  // quatRotate(q_BW, FgW, FgB);
 
-
+  FgB[0] = 0.732 * FgB[0];
+  FgB[1] = 0.732 * FgB[1];
+  FgB[2] = 0.732 * FgB[2];
   //Finding grav torque in body frame
   float tauGB[3];
   crossProduct(r_COMB, FgB, tauGB);
 
   //running 3 axis control law
   for (int i = 0; i < 3; i++){
-    wheel_tau[i] = -1.0f*e_p[i] + e_d[i] + 0.0*inertia_comp[i] + tauGB[i];
+    wheel_tau[i] = e_p[i] + e_d[i] + 0.0*inertia_comp[i] - 1.0*tauGB[i];
   }
   
 }

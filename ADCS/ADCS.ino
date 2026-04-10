@@ -1,23 +1,13 @@
-#define OTA 1
-
 #include <Arduino.h>
 #include <Wire.h>
 #include <Adafruit_BNO08x.h>
 #include <Adafruit_Sensor.h>
 #include <WiFi.h>
+#include <esp_wifi.h>
 #include <esp_now.h>
 #include <BasicLinearAlgebra.h>
 #include "imu_bno085.h"
 #include "motor.h"
-
-#if OTA
-#include <ESPmDNS.h>
-#include <WiFiUdp.h>
-#include <ArduinoOTA.h>
-
-const char* wifi_ssid = "SteinPhone";
-const char* wifi_password = "stein2003";
-#endif
 
 // IMU I2C MACROS
 #define SDA1_PIN 35
@@ -30,20 +20,26 @@ maxon_motor_t y_mot;
 maxon_motor_t z_mot;
 
 ////** GLOBAL PD CONTROLLER VARS **////
-float Kp[3][3] = { { .05, 0, 0 }, { 0, .05, 0 }, { 0, 0, .05 } };
-float Kd[3][3] = { { 0.05, 0, 0 }, { 0, 0.05, 0 }, { 0, 0, 0.05 } };
+float Kp[3][3] = { { 1.0f, 0, 0 }, { 0, 1.0f, 0 }, { 0, 0, 1.f } };
+float Kd[3][3] = { { 0.2f, 0, 0 }, { 0, 0.2f, 0 }, { 0, 0, 0.2f } };
 
 float q_e[4] = {};
 float q_0[4] = {};
+float grav0[3] = {};
+float q_Tilt[4] = {};
+float desG[3] = { 0, 0, -1 };
 bool q0_set = false;
-float q_BW[4] = { 1.0f, 0.0f, 0.0f, 0.0f };
+bool grav_set = false;
+float grav[3] = {};
+float q_WB[4] = { 1.0f, 0.0f, 0.0f, 0.0f };
+float q_BW[4] = {};
 float omega[3] = { 0.0f, 0.0f, 0.0f };
 float wheel_tau[3] = { 0.0f, 0.0f, 0.0f };
 
-float r_COMB[3] = { 0.0490, -0.0471, -0.0562};
+float r_COMB[3] = { 0.0242, -0.022, -0.0231};
 float r_COMmag = sqrt(r_COMB[0] * r_COMB[0] + r_COMB[1] * r_COMB[1] + r_COMB[2] * r_COMB[2]);
 float r_BalW[3] = { 0, 0, -r_COMmag };
-float q_des[4] = { 0.9048, 0.2954, 0.3070, 0.0 };
+float q_des[4] = { 0.90456, -0.309108, -0.29161, 0.030924 };
 float mag_des = sqrt(q_des[0] * q_des[0] + q_des[1] * q_des[1] + q_des[2] * q_des[2] + q_des[3] * q_des[3]);
 
 //Initializing gravity vector in world frame
@@ -56,6 +52,7 @@ float tense_COM[3][3] = { { 0.00437103, 0.00135069, -0.00152319 }, { 0.00135069,
 ////** END GLOBAL PD CONTROLLER VARS **////
 
 ////** ESP-NOW SETUP **////
+static const uint8_t ESPNOW_CHANNEL = 1;
 static const uint8_t RCVR_MAC_ADDR[6] = { 0x1C, 0xDB, 0xD4, 0x9C, 0x35, 0x30 };
 
 typedef struct __attribute__((packed)) {
@@ -63,6 +60,7 @@ typedef struct __attribute__((packed)) {
   float r, i, j, k;
   float ix, iy, iz;
   float gx, gy, gz;
+  float theta;
 } pkt;
 
 static pkt tx_pkt;
@@ -70,33 +68,6 @@ static uint32_t last_send_ms = 0;
 static const uint32_t SEND_PERIOD_MS = 50;
 static uint32_t espnow_attempts = 0;
 ////** END ESP-NOW SETUP **////
-
-////** OTA SOFTWARE UPDATE SETUP **////
-#if OTA
-static void ota_setup() {
-  Serial.println("ota start");
-  WiFi.mode(WIFI_STA);
-  WiFi.begin(wifi_ssid, wifi_password);
-
-  unsigned int nAttempts = 0;
-  while (WiFi.waitForConnectResult() != WL_CONNECTED && nAttempts < 3) {
-    delay(1000);
-    nAttempts++;
-  }
-
-  if (WiFi.waitForConnectResult() != WL_CONNECTED) {
-    Serial.println("OTA: WiFi connect FAILED (OTA unavailable).");
-    return;
-  }
-
-  ArduinoOTA.setHostname("CubeSAT-ESP32");
-  Serial.print("OTA: Connected (IP ");
-  Serial.print(WiFi.localIP());
-  Serial.println(")");
-  ArduinoOTA.begin();
-}
-#endif
-////** END OTA SOFTWARE UPDATE SETUP **////
 
 void setup() {
   Serial.begin(115200);
@@ -116,15 +87,15 @@ void setup() {
 
   bool mot_x_ok = maxon_motor_init(
     &x_mot,
-    8,      // pwm
-    9,      // enable
-    10,     // direction
-    0,      // channel
-    3000,   // pwm freq
-    10,     // num bits
-    false,  // invert enable
-    true,   // invert direction
-    0.00823f   // kt
+    8,        // pwm
+    9,        // enable
+    10,       // direction
+    0,        // channel
+    3000,     // pwm freq
+    10,       // num bits
+    false,    // invert enable
+    true,     // invert direction
+    0.00823f  // kt
   );
 
   bool mot_y_ok = maxon_motor_init(
@@ -154,23 +125,20 @@ void setup() {
     q_des[i] = q_des[i] / mag_des;
   }
 
-// OTA Updates
-#if OTA
-  ota_setup();
-#endif
-
-  // ESPNOW
+  // ** ESPNOW SETUP **//
   WiFi.mode(WIFI_STA);
+  WiFi.disconnect();
+  WiFi.setSleep(false);
+  esp_wifi_set_channel(ESPNOW_CHANNEL, WIFI_SECOND_CHAN_NONE);
 
   if (esp_now_init() != ESP_OK) {
-    Serial.println("ESP-NOW init failed, trying again...");
+    Serial.println("ESP-NOW init failed");
     while (1) delay(10);
   }
 
-  // Add peer esp32 (i.e. the receiver connected to debugging laptop)
   esp_now_peer_info_t peer{};
   memcpy(peer.peer_addr, RCVR_MAC_ADDR, 6);
-  peer.channel = 0;  // 0 = use current WiFi channel
+  peer.channel = ESPNOW_CHANNEL;
   peer.encrypt = false;
 
   if (esp_now_add_peer(&peer) != ESP_OK) {
@@ -178,6 +146,7 @@ void setup() {
     while (1) delay(10);
   }
   Serial.println("ESP-NOW ready");
+  // ** END ESPNOW SETUP **//
 
   // Initialize IMU. ** If it fails, it blocks and the system will not work **
   if (!imu_init(SDA1_PIN, SCL1_PIN, IMU_ADDR, I2C_HZ)) {
@@ -185,17 +154,9 @@ void setup() {
     while (1) delay(10);
   }
   Serial.println("BNO085 init OK");
-
-  // Enable motors
-  maxon_motor_enable(&x_mot, true);
-  maxon_motor_enable(&y_mot, true);
-  maxon_motor_enable(&z_mot, true);
 }
 
 void loop() {
-#if OTA
-  ArduinoOTA.handle();
-#endif
 
   static bool have_q = false;
   static bool have_w = false;
@@ -211,31 +172,9 @@ void loop() {
   bool g_ok = get_gravity(&g);
 
   float q_curr[4] = {};
+  float q_currBW[4] = {};
   float q_rot[4] = {};
   float q_inv[4] = {};
-
-  // Update persistent state
-  if (q_ok) {
-    q_curr[0] = q.r;
-    q_curr[1] = q.i;
-    q_curr[2] = q.j;
-    q_curr[3] = q.k;
-
-    if (!q0_set) {
-      q_0[0] = q_curr[0];
-      q_0[1] = q_curr[1];
-      q_0[2] = q_curr[2];
-      q_0[3] = q_curr[3];
-      q0_set = true;
-    }
-    quatINV(q_0, q_inv);
-    quatMult(q_inv, q_curr, q_rot);
-    q_BW[0] = q_rot[0];
-    q_BW[1] = q_rot[1];
-    q_BW[2] = q_rot[2];
-    q_BW[3] = q_rot[3];
-    have_q = true;
-  }
 
   if (v_ok) {
     omega[0] = v.x;
@@ -244,20 +183,54 @@ void loop() {
     have_w = true;
   }
 
-  if(g_ok)
-  {
+  // Store first gravity vector
+  if (g_ok) {
+    if (!grav_set) {
+      grav0[0] = g.x;
+      grav0[1] = g.y;
+      grav0[2] = g.z;
+      norm(grav0);
+      quatFromVec(grav0, desG, q_Tilt);
+      grav_set = true;
+    }
     have_g = true;
+  }
+
+  // Update persistent state
+  if (q_ok) {
+    q_curr[0] = q.r;  //q_WB
+    q_curr[1] = q.i;
+    q_curr[2] = q.j;
+    q_curr[3] = q.k;
+    quatINV(q_curr, q_currBW);
+    
+      if (!q0_set) {
+        q_0[0] = q_currBW[0];
+        q_0[1] = q_currBW[1];
+        q_0[2] = q_currBW[2];
+        q_0[3] = q_currBW[3];
+        q0_set = true;
+    }
+
+    frameReset(q_currBW, q_0, q_Tilt);
+    q_BW[0] = q_currBW[0];
+    q_BW[1] = q_currBW[1];
+    q_BW[2] = q_currBW[2];
+    q_BW[3] = q_currBW[3];
+    have_q = true;
   }
 
   // Fixed-step timing
   uint32_t now_us = micros();
   float dt = (now_us - last_us) * 1e-6f;
-
+  
   if (have_q && have_w && have_g && dt > 0.0f) {
     last_us = now_us;
-
+    grav[0] = g.x;
+    grav[1] = g.y;
+    grav[2] = g.z;
     errorQuaternion(q_BW, q_des, q_e);
-    Attitude_PD(q_BW, q_e, omega, Kp, Kd, tense_COM, wheel_tau, FgW, r_COMB);
+    Attitude_PD(q_BW, q_e, omega, Kp, Kd, tense_COM, wheel_tau, FgW, r_COMB, grav);
 
     // calculate current to send to each motor given torque using K_t
     float ix_cmd = wheel_tau[0] / x_mot.kt;
@@ -279,9 +252,23 @@ void loop() {
       iy_cmd = 0.0f;
       iz_cmd = 0.0f;
     }
-    maxon_motor_set_current(&x_mot, 0.0f, 2.8f);
-    maxon_motor_set_current(&y_mot, 2.5f, 2.8f);
-    maxon_motor_set_current(&z_mot, 0.0f, 2.8f);
+
+    // // // TEST
+    // static uint32_t last_toggle_ms = 0;
+    // static bool y_positive = true;
+
+    // uint32_t now_test_ms = millis();
+    // if (now_test_ms - last_toggle_ms >= 500) {
+    //   last_toggle_ms = now_test_ms;
+    //   y_positive = !y_positive;
+    // }
+    //  // END TEST
+    // float y_test_cmd = y_positive ? 2.5f : -2.5f;
+
+    maxon_motor_set_current(&x_mot, ix_cmd, 2.8f);
+    maxon_motor_set_current(&y_mot, iy_cmd, 2.8f);
+    maxon_motor_set_current(&z_mot, iz_cmd, 2.8f);
+
 
     // Transmit data packet at 20Hz
     uint32_t now_ms = millis();
@@ -293,6 +280,7 @@ void loop() {
       tx_pkt.i = q_BW[1];
       tx_pkt.j = q_BW[2];
       tx_pkt.k = q_BW[3];
+      tx_pkt.theta = theta;
       tx_pkt.ix = ix_cmd;
       tx_pkt.iy = iy_cmd;
       tx_pkt.iz = iz_cmd;
@@ -324,14 +312,15 @@ void loop() {
     Serial.print(v.z, 4);
     Serial.print(" ] ");
 
-    Serial.print("  q mag: ");
-    Serial.print(q_rot[0], 4);
-    Serial.print("  q x: ");
-    Serial.print(q_rot[1], 4);
-    Serial.print("  q y: ");
-    Serial.print(q_rot[2], 4);
-    Serial.print("  q z: ");
-    Serial.print(q_rot[3], 4);
+    Serial.print(" q BW = [");
+    Serial.print(q_BW[0], 4);
+    Serial.print(", ");
+    Serial.print(q_BW[1], 4);
+    Serial.print(", ");
+    Serial.print(q_BW[2], 4);
+    Serial.print(", ");
+    Serial.print(q_BW[3], 4);
+    Serial.print("]");
 
     Serial.print("  err: ");
     Serial.print(q_e[0], 4);
