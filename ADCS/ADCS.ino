@@ -27,7 +27,7 @@ float q_e[4] = {};
 float q_0[4] = {};
 float grav0[3] = {};
 float q_Tilt[4] = {};
-float desG[3] = { 0, 0, -1 };
+float desG[3] = { 0, 0, 1 }; // change back to -1
 bool q0_set = false;
 bool grav_set = false;
 float grav[3] = {};
@@ -191,6 +191,11 @@ void loop() {
       grav0[2] = g.z;
       norm(grav0);
       quatFromVec(grav0, desG, q_Tilt);
+      Serial.print("q_tilt 0 ");
+      Serial.print(q_Tilt[0], 4);
+      Serial.print(q_Tilt[1], 4);
+      Serial.print(q_Tilt[2], 4);
+      Serial.println(q_Tilt[3], 4);
       grav_set = true;
     }
     have_g = true;
@@ -312,14 +317,14 @@ void loop() {
     Serial.print(v.z, 4);
     Serial.print(" ] ");
 
-    Serial.print(" q BW = [");
-    Serial.print(q_BW[0], 4);
+    Serial.print(" q raw = [");
+    Serial.print(q.r, 4);
     Serial.print(", ");
-    Serial.print(q_BW[1], 4);
+    Serial.print(q.i, 4);
     Serial.print(", ");
-    Serial.print(q_BW[2], 4);
+    Serial.print(q.j, 4);
     Serial.print(", ");
-    Serial.print(q_BW[3], 4);
+    Serial.print(q.k, 4);
     Serial.print("]");
 
     Serial.print("  err: ");

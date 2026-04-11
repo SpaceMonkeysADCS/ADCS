@@ -81,12 +81,12 @@ void loop() {
   Serial.print(p.iz, 6);
   Serial.print("]");
 
-  // Serial.print("  grav_vec = [");
-  // Serial.print(p.gx, 4);
-  // Serial.print(",");
-  // Serial.print(p.gy, 4);
-  // Serial.print(",");
-  // Serial.print(p.gz, 4);
-  // Serial.print("]");
+  Serial.print("  grav_vec = [");
+  Serial.print(p.gx, 4);
+  Serial.print(",");
+  Serial.print(p.gy, 4);
+  Serial.print(",");
+  Serial.print(p.gz, 4);
+  Serial.print("]");
   Serial.println();
 }
