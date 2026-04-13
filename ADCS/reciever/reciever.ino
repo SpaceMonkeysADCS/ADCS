@@ -58,17 +58,17 @@ void loop() {
   newPkt = false;
   interrupts();
 
-  // Serial.print("t_ms: ");
-  // Serial.print((unsigned long)p.t_ms);
-  // Serial.print("  q = [");
-  // Serial.print(p.r, 6);
-  // Serial.print(", ");
-  // Serial.print(p.i, 6);
-  // Serial.print(", ");
-  // Serial.print(p.j, 6);
-  // Serial.print(", ");
-  // Serial.print(p.k, 6);
-  // Serial.print("]");
+  Serial.print("t_ms: ");
+  Serial.print((unsigned long)p.t_ms);
+  Serial.print("  q = [");
+  Serial.print(p.r, 6);
+  Serial.print(", ");
+  Serial.print(p.i, 6);
+  Serial.print(", ");
+  Serial.print(p.j, 6);
+  Serial.print(", ");
+  Serial.print(p.k, 6);
+  Serial.print("]");
 
   Serial.print(" theta = ");
   Serial.print(p.theta);

@@ -20,8 +20,8 @@ maxon_motor_t y_mot;
 maxon_motor_t z_mot;
 
 ////** GLOBAL PD CONTROLLER VARS **////
-float Kp[3][3] = { { 1.0f, 0, 0 }, { 0, 1.0f, 0 }, { 0, 0, 1.f } };
-float Kd[3][3] = { { 0.2f, 0, 0 }, { 0, 0.2f, 0 }, { 0, 0, 0.2f } };
+float Kp[3][3] = { { 1.0f, 0, 0 }, { 0, 1.0f, 0 }, { 0, 0, 1.0f } };
+float Kd[3][3] = { { 0.05f, 0, 0 }, { 0, 0.05f, 0 }, { 0, 0, 0.05f } };
 
 float q_e[4] = {};
 float q_0[4] = {};
@@ -39,7 +39,7 @@ float wheel_tau[3] = { 0.0f, 0.0f, 0.0f };
 float r_COMB[3] = { 0.0242, -0.022, -0.0231};
 float r_COMmag = sqrt(r_COMB[0] * r_COMB[0] + r_COMB[1] * r_COMB[1] + r_COMB[2] * r_COMB[2]);
 float r_BalW[3] = { 0, 0, -r_COMmag };
-float q_des[4] = { 0.90456, -0.309108, -0.29161, 0.030924 };
+float q_des[4] = { 0.31708, 0.02774, -0.891296, 0.323325};
 float mag_des = sqrt(q_des[0] * q_des[0] + q_des[1] * q_des[1] + q_des[2] * q_des[2] + q_des[3] * q_des[3]);
 
 //Initializing gravity vector in world frame
@@ -120,11 +120,6 @@ void setup() {
   maxon_motor_set_current(&y_mot, 0.0f, 2.8f);
   maxon_motor_set_current(&z_mot, 0.0f, 2.8f);
 
-  // Normalize desired quaternion
-  for (int i = 0; i < 4; i++) {
-    q_des[i] = q_des[i] / mag_des;
-  }
-
   // ** ESPNOW SETUP **//
   WiFi.mode(WIFI_STA);
   WiFi.disconnect();
@@ -183,21 +178,24 @@ void loop() {
     have_w = true;
   }
 
-  // Store first gravity vector
+  
   if (g_ok) {
-    if (!grav_set) {
-      grav0[0] = g.x;
-      grav0[1] = g.y;
-      grav0[2] = g.z;
-      norm(grav0);
-      quatFromVec(grav0, desG, q_Tilt);
-      Serial.print("q_tilt 0 ");
-      Serial.print(q_Tilt[0], 4);
-      Serial.print(q_Tilt[1], 4);
-      Serial.print(q_Tilt[2], 4);
-      Serial.println(q_Tilt[3], 4);
-      grav_set = true;
-    }
+    // if (!grav_set) {
+    //   grav0[0] = g.x;
+    //   grav0[1] = g.y;
+    //   grav0[2] = g.z;
+    //   norm(grav0);
+    //   quatFromVec(grav0, desG, q_Tilt);
+    //   Serial.print("q_tilt 0 ");
+    //   Serial.print(q_Tilt[0], 4);
+    //   Serial.print(q_Tilt[1], 4);
+    //   Serial.print(q_Tilt[2], 4);
+    //   Serial.println(q_Tilt[3], 4);
+    //   grav_set = true;
+    // }
+    grav[0] = g.x;
+    grav[1] = g.y;
+    grav[2] = g.z;
     have_g = true;
   }
 
@@ -207,21 +205,21 @@ void loop() {
     q_curr[1] = q.i;
     q_curr[2] = q.j;
     q_curr[3] = q.k;
-    quatINV(q_curr, q_currBW);
+    //quatINV(q_curr, q_currBW);
     
-      if (!q0_set) {
-        q_0[0] = q_currBW[0];
-        q_0[1] = q_currBW[1];
-        q_0[2] = q_currBW[2];
-        q_0[3] = q_currBW[3];
-        q0_set = true;
-    }
+    //   if (!q0_set) {
+    //     q_0[0] = q_currBW[0];
+    //     q_0[1] = q_currBW[1];
+    //     q_0[2] = q_currBW[2];
+    //     q_0[3] = q_currBW[3];
+    //     q0_set = true;
+    // }
 
-    frameReset(q_currBW, q_0, q_Tilt);
-    q_BW[0] = q_currBW[0];
-    q_BW[1] = q_currBW[1];
-    q_BW[2] = q_currBW[2];
-    q_BW[3] = q_currBW[3];
+    // frameReset(q_currBW, q_0, q_Tilt);
+    q_BW[0] = q_curr[0];
+    q_BW[1] = q_curr[1];
+    q_BW[2] = q_curr[2];
+    q_BW[3] = q_curr[3];
     have_q = true;
   }
 
@@ -231,9 +229,7 @@ void loop() {
   
   if (have_q && have_w && have_g && dt > 0.0f) {
     last_us = now_us;
-    grav[0] = g.x;
-    grav[1] = g.y;
-    grav[2] = g.z;
+    
     errorQuaternion(q_BW, q_des, q_e);
     Attitude_PD(q_BW, q_e, omega, Kp, Kd, tense_COM, wheel_tau, FgW, r_COMB, grav);
 
@@ -252,7 +248,7 @@ void loop() {
 
     // command motor current to x, y, z motors
     float theta = 2 * acos(fabs(q_e[0]));
-    if (theta >= 0.06) {
+    if (theta >= 0.08) {
       ix_cmd = 0.0f;
       iy_cmd = 0.0f;
       iz_cmd = 0.0f;
@@ -281,10 +277,10 @@ void loop() {
       last_send_ms = now_ms;
 
       tx_pkt.t_ms = now_ms;
-      tx_pkt.r = q_BW[0];
-      tx_pkt.i = q_BW[1];
-      tx_pkt.j = q_BW[2];
-      tx_pkt.k = q_BW[3];
+      tx_pkt.r = q.r;
+      tx_pkt.i = q.i;
+      tx_pkt.j = q.j;
+      tx_pkt.k = q.k;
       tx_pkt.theta = theta;
       tx_pkt.ix = ix_cmd;
       tx_pkt.iy = iy_cmd;

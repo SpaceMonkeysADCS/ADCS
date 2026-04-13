@@ -12,19 +12,21 @@ void errorQuaternion(float q_BW[4], float q_DW[4], float q_e[4]){
 
   
   //Normalize both Quaternions
-  float mag_BW = sqrt(q_BW[0] * q_BW[0] + q_BW[1] * q_BW[1] + q_BW[2] * q_BW[2] + q_BW[3] * q_BW[3]);
-  float mag_DW = sqrt(q_DW[0] * q_DW[0] + q_DW[1] * q_DW[1] + q_DW[2] * q_DW[2] + q_DW[3] * q_DW[3]);
+  normalizeQuat(q_DW);
+  normalizeQuat(q_BW);
+//   float mag_BW = sqrt(q_BW[0] * q_BW[0] + q_BW[1] * q_BW[1] + q_BW[2] * q_BW[2] + q_BW[3] * q_BW[3]);
+//  // float mag_DW = sqrt(q_DW[0] * q_DW[0] + q_DW[1] * q_DW[1] + q_DW[2] * q_DW[2] + q_DW[3] * q_DW[3]);
 
-  //Normalizing both quaternions
-  q_BW[0] = q_BW[0]/mag_BW;
-  q_BW[1] = q_BW[1]/mag_BW;
-  q_BW[2] = q_BW[2]/mag_BW;
-  q_BW[3] = q_BW[3]/mag_BW;
+//   //Normalizing both quaternions
+//   q_BW[0] = q_BW[0]/mag_BW;
+//   q_BW[1] = q_BW[1]/mag_BW;
+//   q_BW[2] = q_BW[2]/mag_BW;
+//   q_BW[3] = q_BW[3]/mag_BW;
 
-  q_DW[0] = q_DW[0]/mag_DW;
-  q_DW[1] = q_DW[1]/mag_DW;
-  q_DW[2] = q_DW[2]/mag_DW;
-  q_DW[3] = q_DW[3]/mag_DW;
+  // q_DW[0] = q_DW[0]/mag_DW;
+  // q_DW[1] = q_DW[1]/mag_DW;
+  // q_DW[2] = q_DW[2]/mag_DW;
+  // q_DW[3] = q_DW[3]/mag_DW;
 
   //initializing inverse quaternion
   float q_WB[4];

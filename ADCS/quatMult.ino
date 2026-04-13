@@ -19,4 +19,5 @@ void quatMult(float q1[4], float q2[4], float result[4]){
   result[1] = w1*x2 + x1*w2 + y1*z2 - z1*y2;
   result[2] = w1*y2 - x1*z2 + y1*w2 + z1*x2;
   result[3] = w1*z2 + x1*y2 - y1*x2 + z1*w2;
+  normalizeQuat(result);
 }
