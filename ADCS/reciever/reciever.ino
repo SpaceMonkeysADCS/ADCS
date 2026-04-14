@@ -10,6 +10,7 @@ typedef struct __attribute__((packed)) {
   float r, i, j, k;
   float ix, iy, iz;
   float gx, gy, gz;
+  float x_rpm, y_rpm, z_rpm;
   float theta;
 } pkt_t;
 
@@ -73,20 +74,28 @@ void loop() {
   Serial.print(" theta = ");
   Serial.print(p.theta);
 
+  Serial.print("x, y, z rpm = [");
+  Serial.print(p.x_rpm,3);
+  Serial.print(", ");
+  Serial.print(p.y_rpm,3);
+  Serial.print(", ");
+  Serial.print(p.z_rpm,3);
+  Serial.print("]");
+
   Serial.print("  i_cmd = [");
   Serial.print(p.ix, 6);
   Serial.print(", ");
   Serial.print(p.iy, 6);
   Serial.print(", ");
   Serial.print(p.iz, 6);
-  Serial.print("]");
+  Serial.print("] ");
 
-  Serial.print("  grav_vec = [");
-  Serial.print(p.gx, 4);
-  Serial.print(",");
-  Serial.print(p.gy, 4);
-  Serial.print(",");
-  Serial.print(p.gz, 4);
-  Serial.print("]");
+  // Serial.print("  grav_vec = [");
+  // Serial.print(p.gx, 4);
+  // Serial.print(",");
+  // Serial.print(p.gy, 4);
+  // Serial.print(",");
+  // Serial.print(p.gz, 4);
+  // Serial.print("]");
   Serial.println();
 }
