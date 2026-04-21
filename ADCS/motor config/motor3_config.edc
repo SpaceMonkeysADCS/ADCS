@@ -8,7 +8,7 @@
 			<ProfileSource>maxon motor ag</ProfileSource>
 			<ProfileClassID>Device</ProfileClassID>
 		</ProfileHeader>
-		<ProfileBody type="ProfileBody_Device_Escon" formatName="ESCON" formatVersion="1.0" supportedLanguages="en" fileVersion="1.0" fileCreator="stein" fileName="motor3_config.edc" fileCreationDate="23.03.2026">
+		<ProfileBody type="ProfileBody_Device_Escon" formatName="ESCON" formatVersion="1.0" supportedLanguages="en" fileVersion="1.0" fileCreator="stein" fileName="motor3_config.edc" fileCreationDate="21.04.2026">
 			<DeviceIdentity>
 				<vendorName readOnly="true">maxon motor ag</vendorName>
 				<deviceFamily readOnly="true">
@@ -4346,7 +4346,7 @@
 							<label lang="ja">Ohm</label>
 							<label lang="zh-CN">Ohm</label>
 						</unit>
-						<actualValue>3680</actualValue>
+						<actualValue>0</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_TuningOutputDataElectrical_Inductance" persistent="true" variableName="REG_lTuningElectricalInductance">
 						<index>0x3302</index>
@@ -4369,7 +4369,7 @@
 							<label lang="ja">mH</label>
 							<label lang="zh-CN">mH</label>
 						</unit>
-						<actualValue>570</actualValue>
+						<actualValue>0</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_TuningOutputDataElectrical_IdentFrequency1" persistent="true" variableName="REG_lTuningElectricalFrequency1">
 						<index>0x3302</index>
@@ -4392,7 +4392,7 @@
 							<label lang="ja">Hz</label>
 							<label lang="zh-CN">Hz</label>
 						</unit>
-						<actualValue>245740</actualValue>
+						<actualValue>0</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_TuningOutputDataElectrical_IdentFrequency2" persistent="true" variableName="REG_lTuningElectricalFrequency2">
 						<index>0x3302</index>
@@ -4415,7 +4415,7 @@
 							<label lang="ja">Hz</label>
 							<label lang="zh-CN">Hz</label>
 						</unit>
-						<actualValue>2060439</actualValue>
+						<actualValue>0</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_TuningOutputDataElectrical_ProportionalGain" persistent="true" variableName="REG_lTuningElectricalGainProp">
 						<index>0x3302</index>
@@ -4438,7 +4438,7 @@
 							<label lang="ja">Ohm</label>
 							<label lang="zh-CN">Ohm</label>
 						</unit>
-						<actualValue>3701</actualValue>
+						<actualValue>0</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_TuningOutputDataElectrical_IntegralActionTime" persistent="true" variableName="REG_lTuningElectricalIntegralActionTime">
 						<index>0x3302</index>
@@ -4460,7 +4460,7 @@
 							<label lang="ja">µs</label>
 							<label lang="zh-CN">µs</label>
 						</unit>
-						<actualValue>154</actualValue>
+						<actualValue>0</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_TuningOutputDataElectrical_FeedForwardGain" persistent="true" variableName="REG_lTuningElectricalFeedForwardGain">
 						<index>0x3302</index>
@@ -4475,7 +4475,7 @@
 						<unit>
 							<multiplier>0.001</multiplier>
 						</unit>
-						<actualValue>1000</actualValue>
+						<actualValue>0</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_TuningOutputDataMechanical_MassMomentInertia" persistent="true" variableName="REG_lTuningMechanicalInertia">
 						<index>0x3303</index>
@@ -4498,7 +4498,7 @@
 							<label lang="ja">g*cm^2</label>
 							<label lang="zh-CN">g*cm^2</label>
 						</unit>
-						<actualValue>786</actualValue>
+						<actualValue>0</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_TuningOutputDataMechanical_TorqueConstant" persistent="true" variableName="REG_lTuningMechanicalTorqueConst" callbackName="REG_TuningSetSpeedConst">
 						<index>0x3303</index>
@@ -4521,7 +4521,7 @@
 							<label lang="ja">mVs</label>
 							<label lang="zh-CN">mVs</label>
 						</unit>
-						<actualValue>9248</actualValue>
+						<actualValue>0</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_TuningOutputDataMechanical_ViscousFrictionForce" persistent="true" variableName="REG_lTuningMechanicalFriction">
 						<index>0x3303</index>
@@ -4544,7 +4544,7 @@
 							<label lang="ja">mNms/rad</label>
 							<label lang="zh-CN">mNms/rad</label>
 						</unit>
-						<actualValue>1</actualValue>
+						<actualValue>0</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_TuningOutputDataMechanical_IdentFrequency1" persistent="true" variableName="REG_lTuningMechanicalFrequency1">
 						<index>0x3303</index>
@@ -4674,7 +4674,7 @@
 							<label lang="ja">Vs/rad</label>
 							<label lang="zh-CN">Vs/rad</label>
 						</unit>
-						<actualValue>25390</actualValue>
+						<actualValue>0</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_TuningOutputDataElectroMechanical_IntActionTime" persistent="true" variableName="REG_lTuningElectroMechanicalIntegralActionTime">
 						<index>0x3303</index>
@@ -4697,7 +4697,7 @@
 							<label lang="ja">ms</label>
 							<label lang="zh-CN">ms</label>
 						</unit>
-						<actualValue>31025</actualValue>
+						<actualValue>0</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_TuningOutputDataElectroMechanical_FFGain" persistent="true" variableName="REG_lTuningElectroMechanicalFeedForwardGain">
 						<index>0x3303</index>
@@ -4712,7 +4712,7 @@
 						<unit>
 							<multiplier>0.001</multiplier>
 						</unit>
-						<actualValue>1000</actualValue>
+						<actualValue>0</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_TuningOutputDataMechanical_A1mechanical" persistent="true" variableName="REG_lCompRegA1">
 						<index>0x3303</index>
@@ -4802,7 +4802,7 @@
 							<label lang="ja">µs</label>
 							<label lang="zh-CN">µs</label>
 						</unit>
-						<actualValue>46487</actualValue>
+						<actualValue>0</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_TuningOutputDataMechanical_B0electromechanicalLow" persistent="true" variableName="REG_lCompRegB0corrLow">
 						<index>0x3303</index>
@@ -4825,7 +4825,7 @@
 							<label lang="ja">rad/As</label>
 							<label lang="zh-CN">rad/As</label>
 						</unit>
-						<actualValue>146712038</actualValue>
+						<actualValue>0</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_TuningOutputDataMechanical_B0electromechanicalHigh" persistent="true" variableName="REG_lCompRegB0corrHigh">
 						<index>0x3303</index>
@@ -4871,7 +4871,7 @@
 							<label lang="ja">Hz</label>
 							<label lang="zh-CN">Hz</label>
 						</unit>
-						<actualValue>9635</actualValue>
+						<actualValue>0</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_TuningOutputDataElectroMechanical_IdentFrequency2" persistent="true" variableName="REG_lTuningElectroMechanicalFrequency2">
 						<index>0x3303</index>
@@ -4894,7 +4894,7 @@
 							<label lang="ja">Hz</label>
 							<label lang="zh-CN">Hz</label>
 						</unit>
-						<actualValue>6525</actualValue>
+						<actualValue>0</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_MotorType" persistent="true" variableName="DRM_uMotorType" callbackName="DRM_SetMotortype" callbackType="multiple">
 						<index>0x4000</index>
@@ -4941,7 +4941,7 @@
 							<label lang="ja">A</label>
 							<label lang="zh-CN">A</label>
 						</unit>
-						<actualValue>9700</actualValue>
+						<actualValue>20000</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_CurrentLimit" persistent="true" variableName="DRM_dMotorPeakCurrentLimit" callbackName="DRM_SetPeakCurrentLimit">
 						<index>0x4001</index>
@@ -4970,7 +4970,7 @@
 							<label lang="ja">A</label>
 							<label lang="zh-CN">A</label>
 						</unit>
-						<actualValue>28000</actualValue>
+						<actualValue>60000</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_MotorPolePairNumber" persistent="true" variableName="DRM_uPolePairNumber" callbackName="DEV_CheckDisabled">
 						<index>0x4001</index>
@@ -4988,7 +4988,7 @@
 						</dataType>
 						<access>readWrite</access>
 						<defaultValue>1</defaultValue>
-						<actualValue>6</actualValue>
+						<actualValue>1</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_MotorMaximumSpeed" persistent="true" variableName="DRM_dMotorMaximumSpeed" callbackName="DRM_SetMotorMaxSpeed">
 						<index>0x4001</index>
@@ -5017,7 +5017,7 @@
 							<label lang="ja">rpm</label>
 							<label lang="zh-CN">rpm</label>
 						</unit>
-						<actualValue>150000</actualValue>
+						<actualValue>250000</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_MotorThermalTimeConstantWinding" persistent="true" variableName="DRM_wMotorThermalTimeConstWinding" callbackName="DEV_CalcI2tMotorCoeff">
 						<index>0x4001</index>
@@ -5046,7 +5046,7 @@
 							<label lang="ja">s</label>
 							<label lang="zh-CN">s</label>
 						</unit>
-						<actualValue>65</actualValue>
+						<actualValue>40</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_MotorWindingResistance" persistent="true" variableName="DRM_dMotorWindingResistance" callbackName="DRM_SetWindingResistance">
 						<index>0x4001</index>
@@ -5075,7 +5075,7 @@
 							<label lang="ja">Ohm</label>
 							<label lang="zh-CN">Ohm</label>
 						</unit>
-						<actualValue>3680</actualValue>
+						<actualValue>0</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_MotorWindingInductance" persistent="true" variableName="DRM_wMotorWindingInductance" callbackName="DEV_CheckDisabled">
 						<index>0x4001</index>
@@ -5104,7 +5104,7 @@
 							<label lang="ja">mH</label>
 							<label lang="zh-CN">mH</label>
 						</unit>
-						<actualValue>570</actualValue>
+						<actualValue>0</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_MotorSpeedConstant" persistent="true" variableName="DRM_dMotorSpeedConstant" callbackName="DRM_SetSpeedConstant">
 						<index>0x4001</index>
@@ -5133,7 +5133,7 @@
 							<label lang="ja">rpm/V</label>
 							<label lang="zh-CN">rpm/V</label>
 						</unit>
-						<actualValue>10326</actualValue>
+						<actualValue>0</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_MotorRotorInertia" persistent="true" variableName="DRM_dMotorRotorInertia" callbackName="DEV_CheckDisabled">
 						<index>0x4001</index>
@@ -5162,7 +5162,7 @@
 							<label lang="ja">g*cm^2</label>
 							<label lang="zh-CN">g*cm^2</label>
 						</unit>
-						<actualValue>7860</actualValue>
+						<actualValue>0</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_MotorStopStandstillCurrent" persistent="true" variableName="DRM_dMotorStopStandstillCurrent" callbackName="DEV_CheckDisabled">
 						<index>0x4001</index>
@@ -5347,7 +5347,7 @@
 							<label lang="ja">ms</label>
 							<label lang="zh-CN">ms</label>
 						</unit>
-						<actualValue>31</actualValue>
+						<actualValue>10</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_ModeOfConfiguration" persistent="true" variableName="DEV_uConfigurationMode" callbackName="DEV_SetOperationMode" callbackType="multiple">
 						<index>0x4020</index>
@@ -5377,7 +5377,7 @@
 						<defaultValue>
 							<enumEntryIDRef uniqueIDRef="EModeOfOperation_Current"/>
 						</defaultValue>
-						<actualValue>2</actualValue>
+						<actualValue>1</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_ModeOfRegulator" persistent="true" variableName="DEV_uControllerMode" callbackName="DEV_SetOperationMode" callbackType="multiple">
 						<index>0x4020</index>
@@ -5395,7 +5395,7 @@
 						<defaultValue>
 							<enumEntryIDRef uniqueIDRef="EModeOfController_SpeedLimit"/>
 						</defaultValue>
-						<actualValue>3</actualValue>
+						<actualValue>1</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_ModeOfIxR" persistent="true" variableName="DEV_uIxRMode" callbackName="DEV_SetOperationMode" callbackType="multiple">
 						<index>0x4020</index>
@@ -5413,7 +5413,7 @@
 						<defaultValue>
 							<enumEntryIDRef uniqueIDRef="EModeOfIxR_Unknown"/>
 						</defaultValue>
-						<actualValue>1</actualValue>
+						<actualValue>0</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_SpeedRampAcceleration" persistent="true" variableName="REG_dSpeedRampAcceleration">
 						<index>0x4110</index>
@@ -5442,7 +5442,7 @@
 							<label lang="ja">rpm/s</label>
 							<label lang="zh-CN">rpm/s</label>
 						</unit>
-						<actualValue>50000</actualValue>
+						<actualValue>10000</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_SpeedRampDeceleration" persistent="true" variableName="REG_dSpeedRampDeceleration">
 						<index>0x4110</index>
@@ -5471,7 +5471,7 @@
 							<label lang="ja">rpm/s</label>
 							<label lang="zh-CN">rpm/s</label>
 						</unit>
-						<actualValue>50000</actualValue>
+						<actualValue>10000</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_SpeedRampDecelerationStop" persistent="true" variableName="REG_dSpeedRampDecelerationStop">
 						<index>0x4110</index>
@@ -5550,7 +5550,7 @@
 						<dataTypeIDRef uniqueIDRef="SDigitalInputsConfiguration"/>
 						<access>readWrite</access>
 						<defaultValue>0x00000010</defaultValue>
-						<actualValue>0x00000417</actualValue>
+						<actualValue>0x00000010</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_DigitalInputsFunctionalitiesExecutionMask" persistent="true" variableName="IOH_nwDigInputFunctionalitiesMask" callbackName="DEV_SetDigitalInputFuncMask">
 						<index>0x4122</index>
@@ -5560,7 +5560,7 @@
 						<dataTypeIDRef uniqueIDRef="SDigitalInputsFunctionalityMask"/>
 						<access>readWrite</access>
 						<defaultValue>0x0001</defaultValue>
-						<actualValue>0x0009</actualValue>
+						<actualValue>0x0001</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_DigitalOutputsConfiguration" persistent="true" variableName="IOH_ndDigOutputsConfiguration" callbackName="IOH_SetDigitalOutputConfig" callbackType="single">
 						<index>0x4123</index>
@@ -5735,7 +5735,7 @@
 						<dataTypeIDRef uniqueIDRef="SAnalogInputConfigurations"/>
 						<access>readWrite</access>
 						<defaultValue>0x00000000</defaultValue>
-						<actualValue>0x00000100</actualValue>
+						<actualValue>0x00000000</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_AnalogInputsFunctionalitiesExecutionMask" persistent="true" variableName="IOH_nwAnaInputsFunctionalitiesMask">
 						<index>0x4131</index>
@@ -5745,7 +5745,7 @@
 						<dataTypeIDRef uniqueIDRef="SAnalogInputFunctionalities"/>
 						<access>readWrite</access>
 						<defaultValue>0x0000</defaultValue>
-						<actualValue>0x0002</actualValue>
+						<actualValue>0x0000</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_AnalogOutputsConfiguration" persistent="true" variableName="IOH_nuAnaOutputsConfiguration" callbackName="IOH_SetAnalogOutputConfig" callbackType="single">
 						<index>0x4132</index>
@@ -6371,7 +6371,7 @@
 							<label lang="ja">A</label>
 							<label lang="zh-CN">A</label>
 						</unit>
-						<actualValue>28000</actualValue>
+						<actualValue>0</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_SetValueCurrentFixedValue2" persistent="true" variableName="REG_lSetValueCurrentFixedValue2">
 						<index>0x4140</index>
@@ -6400,7 +6400,7 @@
 							<label lang="ja">A</label>
 							<label lang="zh-CN">A</label>
 						</unit>
-						<actualValue>1213</actualValue>
+						<actualValue>0</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_SetValueCurrentFirstSource" persistent="true" variableName="REG_iSetValueCurrentFirstSource">
 						<index>0x4140</index>
@@ -6488,7 +6488,7 @@
 							<label lang="ja">A</label>
 							<label lang="zh-CN">A</label>
 						</unit>
-						<actualValue>1213</actualValue>
+						<actualValue>0</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_SetValueCurrentSecondSource" persistent="true" variableName="REG_iSetValueCurrentSecondSource">
 						<index>0x4140</index>
@@ -6576,7 +6576,7 @@
 							<label lang="ja">A</label>
 							<label lang="zh-CN">A</label>
 						</unit>
-						<actualValue>1213</actualValue>
+						<actualValue>0</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_SetValueSpeedScaling" persistent="true" variableName="REG_lSetValueSpeedScaling" callbackName="IOH_SetAnalogInputConfig">
 						<index>0x4141</index>
@@ -6636,7 +6636,7 @@
 							<label lang="ja">rpm/ms</label>
 							<label lang="zh-CN">rpm/ms</label>
 						</unit>
-						<actualValue>187500</actualValue>
+						<actualValue>0</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_SetValueSpeedOffset" persistent="true" variableName="REG_lSetValueSpeedOffset" callbackName="DEV_CheckDisabled">
 						<index>0x4141</index>
@@ -6659,7 +6659,7 @@
 							<label lang="ja">rpm</label>
 							<label lang="zh-CN">rpm</label>
 						</unit>
-						<actualValue>-18750</actualValue>
+						<actualValue>0</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_SetValueSpeedFixedValue1" persistent="true" variableName="REG_lSetValueSpeedFixedValue1">
 						<index>0x4141</index>
@@ -6783,7 +6783,7 @@
 							<label lang="ja">ms</label>
 							<label lang="zh-CN">ms</label>
 						</unit>
-						<actualValue>100</actualValue>
+						<actualValue>0</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_SetValueSpeedFirstTarget" persistent="true" variableName="REG_lSetValueSpeedFirstTarget">
 						<index>0x4141</index>
@@ -6871,7 +6871,7 @@
 							<label lang="ja">ms</label>
 							<label lang="zh-CN">ms</label>
 						</unit>
-						<actualValue>900</actualValue>
+						<actualValue>0</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_SetValueSpeedSecondTarget" persistent="true" variableName="REG_lSetValueSpeedSecondTarget">
 						<index>0x4141</index>
@@ -6893,7 +6893,7 @@
 							<label lang="ja">rpm</label>
 							<label lang="zh-CN">rpm</label>
 						</unit>
-						<actualValue>150000</actualValue>
+						<actualValue>0</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_SetValueOffsetAdjustScaling" persistent="true" variableName="REG_iSetValueOffsetAdjustScaling" callbackName="IOH_SetAnalogInputConfig">
 						<index>0x4144</index>
@@ -7725,7 +7725,7 @@
 							<label lang="ja">/%</label>
 							<label lang="zh-CN">/%</label>
 						</unit>
-						<actualValue>607</actualValue>
+						<actualValue>10</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_CurrentP_GainOffset" persistent="true" variableName="REG_wCurrentPGainOffset">
 						<index>0x4148</index>
@@ -7740,7 +7740,7 @@
 						<unit>
 							<multiplier>1</multiplier>
 						</unit>
-						<actualValue>454</actualValue>
+						<actualValue>0</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_SpeedP_GainScaling" persistent="true" variableName="REG_wSpeed1PGainScaling">
 						<index>0x4149</index>
@@ -7763,7 +7763,7 @@
 							<label lang="ja">/%</label>
 							<label lang="zh-CN">/%</label>
 						</unit>
-						<actualValue>217</actualValue>
+						<actualValue>10</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_SpeedP_GainOffset" persistent="true" variableName="REG_wSpeed1PGainOffset">
 						<index>0x4149</index>
@@ -7778,7 +7778,7 @@
 						<unit>
 							<multiplier>1</multiplier>
 						</unit>
-						<actualValue>163</actualValue>
+						<actualValue>0</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_Speed2P_GainScaling" persistent="true" variableName="REG_wSpeed2PGainScaling">
 						<index>0x414A</index>
@@ -7869,7 +7869,7 @@
 						</dataType>
 						<access>readWrite</access>
 						<defaultValue>25</defaultValue>
-						<actualValue>758</actualValue>
+						<actualValue>25</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_CurrentRegulatorIntegralTime" persistent="true" variableName="REG_wTnCurr" callbackName="REG_SetCurrRegTimeConstant">
 						<index>0x4200</index>
@@ -7897,7 +7897,7 @@
 							<label lang="ja">µs</label>
 							<label lang="zh-CN">µs</label>
 						</unit>
-						<actualValue>154</actualValue>
+						<actualValue>100</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_CurrentRegulatorFR_Gain" persistent="true" variableName="REG_wKfrCurr" callbackName="REG_SetKfrCurr">
 						<index>0x4200</index>
@@ -7939,7 +7939,7 @@
 						<access>readWrite</access>
 						<defaultValue>200</defaultValue>
 						<unit/>
-						<actualValue>272</actualValue>
+						<actualValue>200</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_Speed1RegulatorIntegralTime" persistent="true" variableName="REG_wTnSpeed1" callbackName="REG_SetSpeedReg1TimeConstant">
 						<index>0x4201</index>
@@ -7968,7 +7968,7 @@
 							<label lang="ja">ms</label>
 							<label lang="zh-CN">ms</label>
 						</unit>
-						<actualValue>310</actualValue>
+						<actualValue>80</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_Speed1RegulatorFR_Gain" persistent="true" variableName="REG_wKfrSpeed1">
 						<index>0x4201</index>
@@ -8163,7 +8163,7 @@
 							<label lang="ja">ms</label>
 							<label lang="zh-CN">ms</label>
 						</unit>
-						<actualValue>23</actualValue>
+						<actualValue>5</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_TuningInputDataElectrical_CurrentAmplitude" persistent="true" variableName="REG_lTuningCurrentAmpl">
 						<index>0x4301</index>
@@ -8186,7 +8186,7 @@
 							<label lang="ja">A</label>
 							<label lang="zh-CN">A</label>
 						</unit>
-						<actualValue>4850</actualValue>
+						<actualValue>20000</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_TuningInputDataElectrical_TransientResponse" persistent="true" variableName="REG_iTuningElectricalResponseType">
 						<index>0x4301</index>
@@ -8232,7 +8232,7 @@
 							<label lang="ja">rpm</label>
 							<label lang="zh-CN">rpm</label>
 						</unit>
-						<actualValue>18750</actualValue>
+						<actualValue>31250</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_TuningInputDataMechanical_Displacement" persistent="true" variableName="REG_lTuningMechanicalDisplacementAmpl">
 						<index>0x4302</index>

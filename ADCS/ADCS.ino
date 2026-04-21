@@ -19,15 +19,18 @@ maxon_motor_t x_mot;
 maxon_motor_t y_mot;
 maxon_motor_t z_mot;
 
+float wheel_rpm[3] = {0, 0, 0};
+float tauGB_out[3] = {};
+
 ////** GLOBAL PD CONTROLLER VARS **////
-float Kp[3][3] = { { 1.0f, 0, 0 }, { 0, 1.0f, 0 }, { 0, 0, 1.0f } };
-float Kd[3][3] = { { 0.05f, 0, 0 }, { 0, 0.05f, 0 }, { 0, 0, 0.05f } };
+float Kp[3][3] = { { 0.3f, 0, 0 }, { 0, 0.3f, 0 }, { 0, 0, 0.3f } };
+float Kd[3][3] = { { 0.35f, 0, 0 }, { 0, 0.35f, 0 }, { 0, 0, 0.35f } }; //0.35
 
 float q_e[4] = {};
 float q_0[4] = {};
 float grav0[3] = {};
 float q_Tilt[4] = {};
-float desG[3] = { 0, 0, 1 }; // change back to -1
+float desG[3] = { 0, 0, -1 }; // change back to -1
 bool q0_set = false;
 bool grav_set = false;
 float grav[3] = {};
@@ -36,11 +39,10 @@ float q_BW[4] = {};
 float omega[3] = { 0.0f, 0.0f, 0.0f };
 float wheel_tau[3] = { 0.0f, 0.0f, 0.0f };
 
-float r_COMB[3] = { 0.0242, -0.022, -0.0231};
+float r_COMB[3] = { 0.0242, -0.022, -0.02365}; //change z back to -0.0236
 float r_COMmag = sqrt(r_COMB[0] * r_COMB[0] + r_COMB[1] * r_COMB[1] + r_COMB[2] * r_COMB[2]);
 float r_BalW[3] = { 0, 0, -r_COMmag };
-float q_des[4] = { 0.31708, 0.02774, -0.891296, 0.323325};
-float mag_des = sqrt(q_des[0] * q_des[0] + q_des[1] * q_des[1] + q_des[2] * q_des[2] + q_des[3] * q_des[3]);
+float q_des[4] = { 0.31922, 0.00573, -0.89154, 0.321350};
 
 //Initializing gravity vector in world frame
 float g = 9.81;
@@ -60,6 +62,7 @@ typedef struct __attribute__((packed)) {
   float r, i, j, k;
   float ix, iy, iz;
   float gx, gy, gz;
+  float x_rpm, y_rpm, z_rpm;
   float theta;
 } pkt;
 
@@ -79,6 +82,7 @@ void setup() {
     5,      // enable
     6,      // direction
     0,      // channel
+    16,      // speed analog pin
     3000,   // pwm freq
     10,     // num bits
     false,  // invert enable
@@ -91,8 +95,9 @@ void setup() {
     9,        // enable
     10,       // direction
     0,        // channel
+    12,       // speed analog pin
     3000,     // pwm freq
-    10,       // num bits
+    10,       // num bits 
     false,    // invert enable
     true,     // invert direction
     0.00823f  // kt
@@ -104,6 +109,7 @@ void setup() {
     21,     // enable
     47,     // direction
     0,      // channel
+    14,      // speed analog pin
     3000,   // pwm freq
     10,     // num bits
     false,  // invert enable
@@ -229,9 +235,11 @@ void loop() {
   
   if (have_q && have_w && have_g && dt > 0.0f) {
     last_us = now_us;
-    
+
+    get_wheel_speed(&x_mot, &y_mot, &z_mot, wheel_rpm);
+
     errorQuaternion(q_BW, q_des, q_e);
-    Attitude_PD(q_BW, q_e, omega, Kp, Kd, tense_COM, wheel_tau, FgW, r_COMB, grav);
+    Attitude_PD(q_BW, q_e, omega, Kp, Kd, tense_COM, wheel_tau, FgW, r_COMB, grav, wheel_rpm, tauGB_out);
 
     // calculate current to send to each motor given torque using K_t
     float ix_cmd = wheel_tau[0] / x_mot.kt;
@@ -248,7 +256,7 @@ void loop() {
 
     // command motor current to x, y, z motors
     float theta = 2 * acos(fabs(q_e[0]));
-    if (theta >= 0.08) {
+    if (theta >= 0.2) {
       ix_cmd = 0.0f;
       iy_cmd = 0.0f;
       iz_cmd = 0.0f;
@@ -285,6 +293,9 @@ void loop() {
       tx_pkt.ix = ix_cmd;
       tx_pkt.iy = iy_cmd;
       tx_pkt.iz = iz_cmd;
+      tx_pkt.x_rpm = wheel_rpm[0];
+      tx_pkt.y_rpm = wheel_rpm[1];
+      tx_pkt.z_rpm = wheel_rpm[2];
       tx_pkt.gx = g_ok ? g.x : 0.0f;
       tx_pkt.gy = g_ok ? g.y : 0.0f;
       tx_pkt.gz = g_ok ? g.z : 0.0f;
@@ -305,6 +316,9 @@ void loop() {
     Serial.print("  theta: ");
     Serial.print(theta, 4);
 
+    Serial.print("y speed: ");
+    Serial.print(wheel_rpm[1],4);
+
     Serial.print("Ang Vel = [ ");
     Serial.print(v.x, 4);
     Serial.print(", ");
@@ -323,10 +337,21 @@ void loop() {
     Serial.print(q.k, 4);
     Serial.print("]");
 
+    Serial.print("tau = [");
+    Serial.print(tauGB_out[0]);
+    Serial.print(", ");
+    Serial.print(tauGB_out[1]);
+    Serial.print(", ");
+    Serial.print(tauGB_out[2]);
+    Serial.print("] ");
+
+
     Serial.print("  err: ");
     Serial.print(q_e[0], 4);
     Serial.print(q_e[1], 4);
     Serial.print(q_e[2], 4);
     Serial.println(q_e[3], 4);
+
+
   }
 }
