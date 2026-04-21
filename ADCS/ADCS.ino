@@ -95,9 +95,9 @@ void setup() {
     9,        // enable
     10,       // direction
     0,        // channel
-    12,        // speed analog pin
+    12,       // speed analog pin
     3000,     // pwm freq
-    10,       // num bits
+    10,       // num bits 
     false,    // invert enable
     true,     // invert direction
     0.00823f  // kt

@@ -96,7 +96,7 @@ void Attitude_PD(float q_BW[4], float q_e[4], float omega[3], float Kp[3][3], fl
   }
 
   for (int i = 0; i<3; i++){
-    wheel_tau[i] = 1.0f*e_p[i] + 1.0f*e_d[i] - 0.5f*inertia_comp[i] - 30.0f *tauGB[i]; //inertia 0.5
+    wheel_tau[i] = 0.0f*e_p[i] + 1.0f*e_d[i];// - 0.5f*inertia_comp[i] - 30.0f *tauGB[i]; //inertia 0.5
     tauGB_out[i] = tauGB[i];
   }
 
